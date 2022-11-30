@@ -1,0 +1,12 @@
+{
+    "projectName": "ClassLanguage",
+    "languages": [{
+        "id": "class-language",
+        "grammar": "src/language-server/class-language.langium",
+        "fileExtensions": [".classl"],
+        "textMate": {
+            "out": "syntaxes/class-language.tmLanguage.json"
+        }
+    }],
+    "out": "src/language-server/generated"
+}

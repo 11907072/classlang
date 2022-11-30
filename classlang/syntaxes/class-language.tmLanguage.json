@@ -1,0 +1,57 @@
+{
+  "name": "class-language",
+  "scopeName": "source.class-language",
+  "fileTypes": [
+    ".classl"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "name": "keyword.control.class-language",
+      "match": "\\b(attribute|Class|Enum|extends|function)\\b"
+    },
+    {
+      "name": "string.quoted.double.class-language",
+      "begin": "\"",
+      "end": "\""
+    },
+    {
+      "name": "string.quoted.single.class-language",
+      "begin": "'",
+      "end": "'"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.class-language",
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.class-language"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.class-language"
+            }
+          }
+        },
+        {
+          "begin": "//",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.class-language"
+            }
+          },
+          "end": "(?=$)",
+          "name": "comment.line.class-language"
+        }
+      ]
+    }
+  }
+}
