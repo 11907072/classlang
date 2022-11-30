@@ -154,7 +154,8 @@ class ClassLanguageAstReflection {
                 return {
                     name: 'ClassBlock',
                     mandatory: [
-                        { name: 'attributes', type: 'array' }
+                        { name: 'attributes', type: 'array' },
+                        { name: 'functions', type: 'array' }
                     ]
                 };
             }
@@ -163,14 +164,6 @@ class ClassLanguageAstReflection {
                     name: 'EnumBlock',
                     mandatory: [
                         { name: 'enumItems', type: 'array' }
-                    ]
-                };
-            }
-            case 'FunctionChoice': {
-                return {
-                    name: 'FunctionChoice',
-                    mandatory: [
-                        { name: 'functions', type: 'array' }
                     ]
                 };
             }

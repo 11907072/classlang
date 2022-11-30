@@ -561,11 +561,16 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
             "cardinality": "*"
           },
           {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "FunctionChoice"
+            "$type": "Assignment",
+            "feature": "functions",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "FunctionChoice"
+              },
+              "arguments": []
             },
-            "arguments": [],
             "cardinality": "*"
           },
           {
@@ -638,8 +643,8 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
           },
           {
             "$type": "Assignment",
-            "feature": "functions",
-            "operator": "+=",
+            "feature": "function",
+            "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {

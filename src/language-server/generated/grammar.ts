@@ -560,11 +560,16 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
             "cardinality": "*"
           },
           {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "FunctionChoice"
+            "$type": "Assignment",
+            "feature": "functions",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "FunctionChoice"
+              },
+              "arguments": []
             },
-            "arguments": [],
             "cardinality": "*"
           },
           {
@@ -637,8 +642,8 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
           },
           {
             "$type": "Assignment",
-            "feature": "functions",
-            "operator": "+=",
+            "feature": "function",
+            "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {

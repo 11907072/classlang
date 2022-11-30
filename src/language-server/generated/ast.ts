@@ -89,6 +89,7 @@ export function isClass(item: unknown): item is Class {
 export interface ClassBlock extends AstNode {
     readonly $container: Class;
     attributes: Array<AttributeChoice>
+    functions: Array<FunctionChoice>
 }
 
 export const ClassBlock = 'ClassBlock';
@@ -154,7 +155,8 @@ export function isFunction(item: unknown): item is Function {
 }
 
 export interface FunctionChoice extends AstNode {
-    functions: Array<Function>
+    readonly $container: ClassBlock;
+    function: Function
 }
 
 export const FunctionChoice = 'FunctionChoice';
@@ -276,7 +278,8 @@ export class ClassLanguageAstReflection implements AstReflection {
                 return {
                     name: 'ClassBlock',
                     mandatory: [
-                        { name: 'attributes', type: 'array' }
+                        { name: 'attributes', type: 'array' },
+                        { name: 'functions', type: 'array' }
                     ]
                 };
             }
@@ -285,14 +288,6 @@ export class ClassLanguageAstReflection implements AstReflection {
                     name: 'EnumBlock',
                     mandatory: [
                         { name: 'enumItems', type: 'array' }
-                    ]
-                };
-            }
-            case 'FunctionChoice': {
-                return {
-                    name: 'FunctionChoice',
-                    mandatory: [
-                        { name: 'functions', type: 'array' }
                     ]
                 };
             }

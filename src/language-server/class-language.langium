@@ -34,13 +34,13 @@ Extension:
     'extends' class=[Class];
 
 ClassBlock:
-    '{' (attributes += AttributeChoice)* (FunctionChoice)* '}';
+    '{' (attributes += AttributeChoice)* (functions += FunctionChoice)* '}';
     
 AttributeChoice:
     'attribute' VISIBILITY (attribute=Attribute);
 
 FunctionChoice:
-    'function' VISIBILITY (functions += Function);
+    'function' VISIBILITY (function = Function);
 
 Enum:
     'Enum' (name=ID) enumBlock=EnumBlock;
