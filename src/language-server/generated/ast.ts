@@ -7,24 +7,15 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { AstNode, AstReflection, Reference, ReferenceInfo, isAstNode, TypeMetaData } from 'langium';
 
-export type ClassBlock = AttributeChoice | FunctionChoice;
+export type Aggregation = RelationshipItem | RelationshipLabel;
 
-export const ClassBlock = 'ClassBlock';
+export const Aggregation = 'Aggregation';
 
-export function isClassBlock(item: unknown): item is ClassBlock {
-    return reflection.isInstance(item, ClassBlock);
+export function isAggregation(item: unknown): item is Aggregation {
+    return reflection.isInstance(item, Aggregation);
 }
 
-export type EnumBlock = EnumItem;
-
-export const EnumBlock = 'EnumBlock';
-
-export function isEnumBlock(item: unknown): item is EnumBlock {
-    return reflection.isInstance(item, EnumBlock);
-}
-
-export interface Association extends AstNode {
-}
+export type Association = RelationshipItem | RelationshipLabel;
 
 export const Association = 'Association';
 
@@ -32,9 +23,26 @@ export function isAssociation(item: unknown): item is Association {
     return reflection.isInstance(item, Association);
 }
 
+export type Composition = RelationshipItem | RelationshipLabel;
+
+export const Composition = 'Composition';
+
+export function isComposition(item: unknown): item is Composition {
+    return reflection.isInstance(item, Composition);
+}
+
+export type Inheritance = RelationshipItem;
+
+export const Inheritance = 'Inheritance';
+
+export function isInheritance(item: unknown): item is Inheritance {
+    return reflection.isInstance(item, Inheritance);
+}
+
 export interface Attribute extends AstNode {
     readonly $container: AttributeChoice;
     name: string
+    typeDefinition: TypeDefinition
 }
 
 export const Attribute = 'Attribute';
@@ -44,7 +52,8 @@ export function isAttribute(item: unknown): item is Attribute {
 }
 
 export interface AttributeChoice extends AstNode {
-    attributes: Array<Attribute>
+    readonly $container: ClassBlock;
+    attribute: Attribute
 }
 
 export const AttributeChoice = 'AttributeChoice';
@@ -53,8 +62,21 @@ export function isAttributeChoice(item: unknown): item is AttributeChoice {
     return reflection.isInstance(item, AttributeChoice);
 }
 
+export interface Cardinality extends AstNode {
+    readonly $container: RelationshipItem;
+    amt: '*' | '+' | number
+}
+
+export const Cardinality = 'Cardinality';
+
+export function isCardinality(item: unknown): item is Cardinality {
+    return reflection.isInstance(item, Cardinality);
+}
+
 export interface Class extends AstNode {
     readonly $container: Model;
+    classBlock: ClassBlock
+    extension?: Extension
     name: string
 }
 
@@ -64,8 +86,20 @@ export function isClass(item: unknown): item is Class {
     return reflection.isInstance(item, Class);
 }
 
+export interface ClassBlock extends AstNode {
+    readonly $container: Class;
+    attributes: Array<AttributeChoice>
+}
+
+export const ClassBlock = 'ClassBlock';
+
+export function isClassBlock(item: unknown): item is ClassBlock {
+    return reflection.isInstance(item, ClassBlock);
+}
+
 export interface Enum extends AstNode {
     readonly $container: Model;
+    enumBlock: EnumBlock
     name: string
 }
 
@@ -75,7 +109,19 @@ export function isEnum(item: unknown): item is Enum {
     return reflection.isInstance(item, Enum);
 }
 
+export interface EnumBlock extends AstNode {
+    readonly $container: Enum;
+    enumItems: Array<EnumItem>
+}
+
+export const EnumBlock = 'EnumBlock';
+
+export function isEnumBlock(item: unknown): item is EnumBlock {
+    return reflection.isInstance(item, EnumBlock);
+}
+
 export interface EnumItem extends AstNode {
+    readonly $container: EnumBlock;
     name: string
 }
 
@@ -86,7 +132,8 @@ export function isEnumItem(item: unknown): item is EnumItem {
 }
 
 export interface Extension extends AstNode {
-    superType: Reference<Class>
+    readonly $container: Class;
+    class: Reference<Class>
 }
 
 export const Extension = 'Extension';
@@ -119,6 +166,7 @@ export function isFunctionChoice(item: unknown): item is FunctionChoice {
 export interface Model extends AstNode {
     classes: Array<Class>
     enums: Array<Enum>
+    relationships: Array<Relationship>
 }
 
 export const Model = 'Model';
@@ -127,7 +175,45 @@ export function isModel(item: unknown): item is Model {
     return reflection.isInstance(item, Model);
 }
 
+export interface Relationship extends AstNode {
+    readonly $container: Model;
+    aggregations: Array<Aggregation>
+    associations: Array<Association>
+    compositions: Array<Composition>
+    inheritances: Array<Inheritance>
+}
+
+export const Relationship = 'Relationship';
+
+export function isRelationship(item: unknown): item is Relationship {
+    return reflection.isInstance(item, Relationship);
+}
+
+export interface RelationshipItem extends AstNode {
+    readonly $container: Relationship;
+    cardinality: Cardinality
+    class: Reference<Class>
+}
+
+export const RelationshipItem = 'RelationshipItem';
+
+export function isRelationshipItem(item: unknown): item is RelationshipItem {
+    return reflection.isInstance(item, RelationshipItem);
+}
+
+export interface RelationshipLabel extends AstNode {
+    readonly $container: Relationship;
+    name: string
+}
+
+export const RelationshipLabel = 'RelationshipLabel';
+
+export function isRelationshipLabel(item: unknown): item is RelationshipLabel {
+    return reflection.isInstance(item, RelationshipLabel);
+}
+
 export interface TypeDefinition extends AstNode {
+    readonly $container: Attribute;
     enum: Reference<Enum>
 }
 
@@ -137,12 +223,12 @@ export function isTypeDefinition(item: unknown): item is TypeDefinition {
     return reflection.isInstance(item, TypeDefinition);
 }
 
-export type ClassLanguageAstType = 'Association' | 'Attribute' | 'AttributeChoice' | 'Class' | 'ClassBlock' | 'Enum' | 'EnumBlock' | 'EnumItem' | 'Extension' | 'Function' | 'FunctionChoice' | 'Model' | 'TypeDefinition';
+export type ClassLanguageAstType = 'Aggregation' | 'Association' | 'Attribute' | 'AttributeChoice' | 'Cardinality' | 'Class' | 'ClassBlock' | 'Composition' | 'Enum' | 'EnumBlock' | 'EnumItem' | 'Extension' | 'Function' | 'FunctionChoice' | 'Inheritance' | 'Model' | 'Relationship' | 'RelationshipItem' | 'RelationshipLabel' | 'TypeDefinition';
 
 export class ClassLanguageAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['Association', 'Attribute', 'AttributeChoice', 'Class', 'ClassBlock', 'Enum', 'EnumBlock', 'EnumItem', 'Extension', 'Function', 'FunctionChoice', 'Model', 'TypeDefinition'];
+        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Enum', 'EnumBlock', 'EnumItem', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -154,12 +240,11 @@ export class ClassLanguageAstReflection implements AstReflection {
             return true;
         }
         switch (subtype) {
-            case AttributeChoice:
-            case FunctionChoice: {
-                return this.isSubtype(ClassBlock, supertype);
+            case RelationshipItem: {
+                return this.isSubtype(Association, supertype) || this.isSubtype(Composition, supertype) || this.isSubtype(Aggregation, supertype) || this.isSubtype(Inheritance, supertype);
             }
-            case EnumItem: {
-                return this.isSubtype(EnumBlock, supertype);
+            case RelationshipLabel: {
+                return this.isSubtype(Association, supertype) || this.isSubtype(Composition, supertype) || this.isSubtype(Aggregation, supertype);
             }
             default: {
                 return false;
@@ -170,7 +255,10 @@ export class ClassLanguageAstReflection implements AstReflection {
     getReferenceType(refInfo: ReferenceInfo): string {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
-            case 'Extension:superType': {
+            case 'Extension:class': {
+                return Class;
+            }
+            case 'RelationshipItem:class': {
                 return Class;
             }
             case 'TypeDefinition:enum': {
@@ -184,11 +272,19 @@ export class ClassLanguageAstReflection implements AstReflection {
 
     getTypeMetaData(type: string): TypeMetaData {
         switch (type) {
-            case 'AttributeChoice': {
+            case 'ClassBlock': {
                 return {
-                    name: 'AttributeChoice',
+                    name: 'ClassBlock',
                     mandatory: [
                         { name: 'attributes', type: 'array' }
+                    ]
+                };
+            }
+            case 'EnumBlock': {
+                return {
+                    name: 'EnumBlock',
+                    mandatory: [
+                        { name: 'enumItems', type: 'array' }
                     ]
                 };
             }
@@ -205,7 +301,19 @@ export class ClassLanguageAstReflection implements AstReflection {
                     name: 'Model',
                     mandatory: [
                         { name: 'classes', type: 'array' },
-                        { name: 'enums', type: 'array' }
+                        { name: 'enums', type: 'array' },
+                        { name: 'relationships', type: 'array' }
+                    ]
+                };
+            }
+            case 'Relationship': {
+                return {
+                    name: 'Relationship',
+                    mandatory: [
+                        { name: 'aggregations', type: 'array' },
+                        { name: 'associations', type: 'array' },
+                        { name: 'compositions', type: 'array' },
+                        { name: 'inheritances', type: 'array' }
                     ]
                 };
             }

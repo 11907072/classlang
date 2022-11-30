@@ -1,39 +1,58 @@
 grammar ClassLanguage
 
 entry Model:
-    (classes+=Class | enums+=Enum )* ;
+    (classes+=Class | enums+=Enum )* (relationships+=Relationship)*;
 
+Relationship:
+    associations+=Association|compositions+=Composition|inheritances+=Inheritance|aggregations+=Aggregation;
 
-interface Association {
-    
-}
+Association:
+    'association' RelationshipItem RelationshipLabel? '<=>' RelationshipItem RelationshipLabel?;
+
+Composition:
+    'composition' RelationshipItem RelationshipLabel?'=>' RelationshipItem RelationshipLabel?;
+
+Aggregation:
+    'aggregation' RelationshipItem RelationshipLabel? '=>' RelationshipItem RelationshipLabel?;
+
+Inheritance:
+    'inheritance' RelationshipItem '=>' RelationshipItem;
+
+RelationshipItem:
+    class=[Class] cardinality=Cardinality;
+
+RelationshipLabel:
+    VISIBILITY name=ID;
+
+Cardinality:
+    "(" amt=(INT|"*"|"+")")";
 
 Class:
-    'Class' (name = ID) (Extension)* ClassBlock ;
+    'Class' (name = ID) extension=(Extension)? classBlock=ClassBlock;
 
 Extension:
-    'extends' superType=[Class:ID];
+    'extends' class=[Class];
 
 ClassBlock:
-    '{' (AttributeChoice)* (FunctionChoice)* '}';
+    '{' (attributes += AttributeChoice)* (FunctionChoice)* '}';
     
 AttributeChoice:
-    'attribute' VISIBILITY (attributes += Attribute);
+    'attribute' VISIBILITY (attribute=Attribute);
 
 FunctionChoice:
     'function' VISIBILITY (functions += Function);
 
 Enum:
-    'Enum' (name=ID) EnumBlock;
+    'Enum' (name=ID) enumBlock=EnumBlock;
 
 EnumBlock:
-    '{' (EnumItem)* '}';
+    '{' (enumItems+=EnumItem)* '}';
 
 EnumItem:
     (name = ID);
 
 Attribute:
-     (name = ID) ":" TypeDefinition;
+     (name = ID) ":" typeDefinition=TypeDefinition;
 
 Function:
     (name = ID) ":" (DATAINT | DATASTRING | DATADATETIME) ;
@@ -50,6 +69,7 @@ terminal ID: /[_a-zA-Z][\w_]*/;
 terminal INT returns number: /[0-9]+/;
 terminal STRING: /"[^"]*"|'[^']*'/;
 terminal VISIBILITY: /[#+-]/;
+
 
 hidden terminal ML_COMMENT: /\/\*[\s\S]*?\*\//;
 hidden terminal SL_COMMENT: /\/\/[^\n\r]*/;

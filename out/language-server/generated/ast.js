@@ -4,25 +4,30 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reflection = exports.ClassLanguageAstReflection = exports.isTypeDefinition = exports.TypeDefinition = exports.isModel = exports.Model = exports.isFunctionChoice = exports.FunctionChoice = exports.isFunction = exports.Function = exports.isEnumItem = exports.EnumItem = exports.isEnum = exports.Enum = exports.isClass = exports.Class = exports.isAttributeChoice = exports.AttributeChoice = exports.isAttribute = exports.Attribute = exports.isAssociation = exports.Association = exports.isEnumBlock = exports.EnumBlock = exports.isClassBlock = exports.ClassBlock = void 0;
+exports.reflection = exports.ClassLanguageAstReflection = exports.isTypeDefinition = exports.TypeDefinition = exports.isRelationshipLabel = exports.RelationshipLabel = exports.isRelationshipItem = exports.RelationshipItem = exports.isRelationship = exports.Relationship = exports.isModel = exports.Model = exports.isFunctionChoice = exports.FunctionChoice = exports.isFunction = exports.Function = exports.isExtension = exports.Extension = exports.isEnumItem = exports.EnumItem = exports.isEnumBlock = exports.EnumBlock = exports.isEnum = exports.Enum = exports.isClassBlock = exports.ClassBlock = exports.isClass = exports.Class = exports.isCardinality = exports.Cardinality = exports.isAttributeChoice = exports.AttributeChoice = exports.isAttribute = exports.Attribute = exports.isInheritance = exports.Inheritance = exports.isComposition = exports.Composition = exports.isAssociation = exports.Association = exports.isAggregation = exports.Aggregation = void 0;
 /* eslint-disable @typescript-eslint/array-type */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 const langium_1 = require("langium");
-exports.ClassBlock = 'ClassBlock';
-function isClassBlock(item) {
-    return exports.reflection.isInstance(item, exports.ClassBlock);
+exports.Aggregation = 'Aggregation';
+function isAggregation(item) {
+    return exports.reflection.isInstance(item, exports.Aggregation);
 }
-exports.isClassBlock = isClassBlock;
-exports.EnumBlock = 'EnumBlock';
-function isEnumBlock(item) {
-    return exports.reflection.isInstance(item, exports.EnumBlock);
-}
-exports.isEnumBlock = isEnumBlock;
+exports.isAggregation = isAggregation;
 exports.Association = 'Association';
 function isAssociation(item) {
     return exports.reflection.isInstance(item, exports.Association);
 }
 exports.isAssociation = isAssociation;
+exports.Composition = 'Composition';
+function isComposition(item) {
+    return exports.reflection.isInstance(item, exports.Composition);
+}
+exports.isComposition = isComposition;
+exports.Inheritance = 'Inheritance';
+function isInheritance(item) {
+    return exports.reflection.isInstance(item, exports.Inheritance);
+}
+exports.isInheritance = isInheritance;
 exports.Attribute = 'Attribute';
 function isAttribute(item) {
     return exports.reflection.isInstance(item, exports.Attribute);
@@ -33,21 +38,41 @@ function isAttributeChoice(item) {
     return exports.reflection.isInstance(item, exports.AttributeChoice);
 }
 exports.isAttributeChoice = isAttributeChoice;
+exports.Cardinality = 'Cardinality';
+function isCardinality(item) {
+    return exports.reflection.isInstance(item, exports.Cardinality);
+}
+exports.isCardinality = isCardinality;
 exports.Class = 'Class';
 function isClass(item) {
     return exports.reflection.isInstance(item, exports.Class);
 }
 exports.isClass = isClass;
+exports.ClassBlock = 'ClassBlock';
+function isClassBlock(item) {
+    return exports.reflection.isInstance(item, exports.ClassBlock);
+}
+exports.isClassBlock = isClassBlock;
 exports.Enum = 'Enum';
 function isEnum(item) {
     return exports.reflection.isInstance(item, exports.Enum);
 }
 exports.isEnum = isEnum;
+exports.EnumBlock = 'EnumBlock';
+function isEnumBlock(item) {
+    return exports.reflection.isInstance(item, exports.EnumBlock);
+}
+exports.isEnumBlock = isEnumBlock;
 exports.EnumItem = 'EnumItem';
 function isEnumItem(item) {
     return exports.reflection.isInstance(item, exports.EnumItem);
 }
 exports.isEnumItem = isEnumItem;
+exports.Extension = 'Extension';
+function isExtension(item) {
+    return exports.reflection.isInstance(item, exports.Extension);
+}
+exports.isExtension = isExtension;
 exports.Function = 'Function';
 function isFunction(item) {
     return exports.reflection.isInstance(item, exports.Function);
@@ -63,6 +88,21 @@ function isModel(item) {
     return exports.reflection.isInstance(item, exports.Model);
 }
 exports.isModel = isModel;
+exports.Relationship = 'Relationship';
+function isRelationship(item) {
+    return exports.reflection.isInstance(item, exports.Relationship);
+}
+exports.isRelationship = isRelationship;
+exports.RelationshipItem = 'RelationshipItem';
+function isRelationshipItem(item) {
+    return exports.reflection.isInstance(item, exports.RelationshipItem);
+}
+exports.isRelationshipItem = isRelationshipItem;
+exports.RelationshipLabel = 'RelationshipLabel';
+function isRelationshipLabel(item) {
+    return exports.reflection.isInstance(item, exports.RelationshipLabel);
+}
+exports.isRelationshipLabel = isRelationshipLabel;
 exports.TypeDefinition = 'TypeDefinition';
 function isTypeDefinition(item) {
     return exports.reflection.isInstance(item, exports.TypeDefinition);
@@ -70,7 +110,7 @@ function isTypeDefinition(item) {
 exports.isTypeDefinition = isTypeDefinition;
 class ClassLanguageAstReflection {
     getAllTypes() {
-        return ['Association', 'Attribute', 'AttributeChoice', 'Class', 'ClassBlock', 'Enum', 'EnumBlock', 'EnumItem', 'Function', 'FunctionChoice', 'Model', 'TypeDefinition'];
+        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Enum', 'EnumBlock', 'EnumItem', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition'];
     }
     isInstance(node, type) {
         return (0, langium_1.isAstNode)(node) && this.isSubtype(node.$type, type);
@@ -80,12 +120,11 @@ class ClassLanguageAstReflection {
             return true;
         }
         switch (subtype) {
-            case exports.AttributeChoice:
-            case exports.FunctionChoice: {
-                return this.isSubtype(exports.ClassBlock, supertype);
+            case exports.RelationshipItem: {
+                return this.isSubtype(exports.Association, supertype) || this.isSubtype(exports.Composition, supertype) || this.isSubtype(exports.Aggregation, supertype) || this.isSubtype(exports.Inheritance, supertype);
             }
-            case exports.EnumItem: {
-                return this.isSubtype(exports.EnumBlock, supertype);
+            case exports.RelationshipLabel: {
+                return this.isSubtype(exports.Association, supertype) || this.isSubtype(exports.Composition, supertype) || this.isSubtype(exports.Aggregation, supertype);
             }
             default: {
                 return false;
@@ -95,8 +134,11 @@ class ClassLanguageAstReflection {
     getReferenceType(refInfo) {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
-            case 'Association:attribute': {
-                return exports.Attribute;
+            case 'Extension:class': {
+                return exports.Class;
+            }
+            case 'RelationshipItem:class': {
+                return exports.Class;
             }
             case 'TypeDefinition:enum': {
                 return exports.Enum;
@@ -108,11 +150,19 @@ class ClassLanguageAstReflection {
     }
     getTypeMetaData(type) {
         switch (type) {
-            case 'AttributeChoice': {
+            case 'ClassBlock': {
                 return {
-                    name: 'AttributeChoice',
+                    name: 'ClassBlock',
                     mandatory: [
                         { name: 'attributes', type: 'array' }
+                    ]
+                };
+            }
+            case 'EnumBlock': {
+                return {
+                    name: 'EnumBlock',
+                    mandatory: [
+                        { name: 'enumItems', type: 'array' }
                     ]
                 };
             }
@@ -129,7 +179,19 @@ class ClassLanguageAstReflection {
                     name: 'Model',
                     mandatory: [
                         { name: 'classes', type: 'array' },
-                        { name: 'enums', type: 'array' }
+                        { name: 'enums', type: 'array' },
+                        { name: 'relationships', type: 'array' }
+                    ]
+                };
+            }
+            case 'Relationship': {
+                return {
+                    name: 'Relationship',
+                    mandatory: [
+                        { name: 'aggregations', type: 'array' },
+                        { name: 'associations', type: 'array' },
+                        { name: 'compositions', type: 'array' },
+                        { name: 'inheritances', type: 'array' }
                     ]
                 };
             }

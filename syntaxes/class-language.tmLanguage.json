@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.class-language",
-      "match": "\\b(attribute|Class|Enum|extends|function)\\b"
+      "match": "\\b(aggregation|association|attribute|Class|composition|Enum|extends|function|inheritance)\\b"
     },
     {
       "name": "string.quoted.double.class-language",
