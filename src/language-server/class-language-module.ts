@@ -4,6 +4,7 @@ import {
 } from 'langium';
 import { ClassLanguageGeneratedModule, ClassLanguageGeneratedSharedModule } from './generated/module';
 import { ClassLanguageValidationRegistry, ClassLanguageValidator } from './class-language-validator';
+import { ClassLanguageFormatter } from './class-language-formatter';
 
 /**
  * Declaration of custom services - add your own service classes here.
@@ -29,6 +30,9 @@ export const ClassLanguageModule: Module<ClassLanguageServices, PartialLangiumSe
     validation: {
         ValidationRegistry: (services) => new ClassLanguageValidationRegistry(services),
         ClassLanguageValidator: () => new ClassLanguageValidator()
+    },
+    lsp: {
+        Formatter: () => new ClassLanguageFormatter()
     }
 };
 

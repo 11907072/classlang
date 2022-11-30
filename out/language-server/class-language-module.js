@@ -4,6 +4,7 @@ exports.createClassLanguageServices = exports.ClassLanguageModule = void 0;
 const langium_1 = require("langium");
 const module_1 = require("./generated/module");
 const class_language_validator_1 = require("./class-language-validator");
+const class_language_formatter_1 = require("./class-language-formatter");
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
@@ -13,6 +14,9 @@ exports.ClassLanguageModule = {
     validation: {
         ValidationRegistry: (services) => new class_language_validator_1.ClassLanguageValidationRegistry(services),
         ClassLanguageValidator: () => new class_language_validator_1.ClassLanguageValidator()
+    },
+    lsp: {
+        Formatter: () => new class_language_formatter_1.ClassLanguageFormatter()
     }
 };
 /**
