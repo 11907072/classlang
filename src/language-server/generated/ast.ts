@@ -39,6 +39,14 @@ export function isInheritance(item: unknown): item is Inheritance {
     return reflection.isInstance(item, Inheritance);
 }
 
+export type TypeOutputDefinition = TypeDefinition;
+
+export const TypeOutputDefinition = 'TypeOutputDefinition';
+
+export function isTypeOutputDefinition(item: unknown): item is TypeOutputDefinition {
+    return reflection.isInstance(item, TypeOutputDefinition);
+}
+
 export interface Attribute extends AstNode {
     readonly $container: AttributeChoice;
     name: string
@@ -132,6 +140,17 @@ export function isEnumItem(item: unknown): item is EnumItem {
     return reflection.isInstance(item, EnumItem);
 }
 
+export interface EnumReference extends AstNode {
+    readonly $container: Function;
+    enum: Reference<Enum>
+}
+
+export const EnumReference = 'EnumReference';
+
+export function isEnumReference(item: unknown): item is EnumReference {
+    return reflection.isInstance(item, EnumReference);
+}
+
 export interface Extension extends AstNode {
     readonly $container: Class;
     class: Reference<Class>
@@ -146,6 +165,7 @@ export function isExtension(item: unknown): item is Extension {
 export interface Function extends AstNode {
     readonly $container: FunctionChoice;
     name: string
+    typeOutputDefition: EnumReference | TypeOutputDefinition
 }
 
 export const Function = 'Function';
@@ -215,8 +235,8 @@ export function isRelationshipLabel(item: unknown): item is RelationshipLabel {
 }
 
 export interface TypeDefinition extends AstNode {
-    readonly $container: Attribute;
-    enum: Reference<Enum>
+    readonly $container: Attribute | Function;
+    data: 'DateTime' | 'int' | 'string'
 }
 
 export const TypeDefinition = 'TypeDefinition';
@@ -225,12 +245,12 @@ export function isTypeDefinition(item: unknown): item is TypeDefinition {
     return reflection.isInstance(item, TypeDefinition);
 }
 
-export type ClassLanguageAstType = 'Aggregation' | 'Association' | 'Attribute' | 'AttributeChoice' | 'Cardinality' | 'Class' | 'ClassBlock' | 'Composition' | 'Enum' | 'EnumBlock' | 'EnumItem' | 'Extension' | 'Function' | 'FunctionChoice' | 'Inheritance' | 'Model' | 'Relationship' | 'RelationshipItem' | 'RelationshipLabel' | 'TypeDefinition';
+export type ClassLanguageAstType = 'Aggregation' | 'Association' | 'Attribute' | 'AttributeChoice' | 'Cardinality' | 'Class' | 'ClassBlock' | 'Composition' | 'Enum' | 'EnumBlock' | 'EnumItem' | 'EnumReference' | 'Extension' | 'Function' | 'FunctionChoice' | 'Inheritance' | 'Model' | 'Relationship' | 'RelationshipItem' | 'RelationshipLabel' | 'TypeDefinition' | 'TypeOutputDefinition';
 
 export class ClassLanguageAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Enum', 'EnumBlock', 'EnumItem', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition'];
+        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Enum', 'EnumBlock', 'EnumItem', 'EnumReference', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition', 'TypeOutputDefinition'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -248,6 +268,9 @@ export class ClassLanguageAstReflection implements AstReflection {
             case RelationshipLabel: {
                 return this.isSubtype(Association, supertype) || this.isSubtype(Composition, supertype) || this.isSubtype(Aggregation, supertype);
             }
+            case TypeDefinition: {
+                return this.isSubtype(TypeOutputDefinition, supertype);
+            }
             default: {
                 return false;
             }
@@ -257,14 +280,14 @@ export class ClassLanguageAstReflection implements AstReflection {
     getReferenceType(refInfo: ReferenceInfo): string {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
+            case 'EnumReference:enum': {
+                return Enum;
+            }
             case 'Extension:class': {
                 return Class;
             }
             case 'RelationshipItem:class': {
                 return Class;
-            }
-            case 'TypeDefinition:enum': {
-                return Enum;
             }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);

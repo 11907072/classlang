@@ -55,11 +55,16 @@ Attribute:
      (name = ID) ":" typeDefinition=TypeDefinition;
 
 Function:
-    (name = ID) ":" (DATAINT | DATASTRING | DATADATETIME) ;
+    (name = ID) "("  ")" ":" typeOutputDefition=(TypeOutputDefinition|EnumReference) ;
 
 TypeDefinition:
-    enum=[Enum:ID];
+    data=("int" | "string" | "DateTime");
 
+EnumReference:
+    enum=[Enum];
+
+TypeOutputDefinition:
+    TypeDefinition | "void";
 
 hidden terminal WS: /\s+/;
 terminal DATAINT: "int";
