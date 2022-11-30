@@ -1,5 +1,5 @@
 import {ValidationChecks, ValidationRegistry } from 'langium';
-import { AttributeChoice, ClassLanguageAstType } from './generated/ast';
+import { ClassLanguageAstType } from './generated/ast';
 import type { ClassLanguageServices } from './class-language-module';
 
 
@@ -21,9 +21,6 @@ export class ClassLanguageValidationRegistry extends ValidationRegistry {
  * Implementation of custom validations.
  */
 export class checkAttributeNameIsUnique {
-    constructor(attrChoice: AttributeChoice){
-        
-    }
     
 
 }
