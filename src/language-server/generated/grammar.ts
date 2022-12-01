@@ -1016,6 +1016,11 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
                 "arguments": []
               }
             ]
+          },
+          {
+            "$type": "Keyword",
+            "value": "[]",
+            "cardinality": "?"
           }
         ]
       },

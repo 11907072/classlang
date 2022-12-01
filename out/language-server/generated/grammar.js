@@ -1017,6 +1017,11 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
                 "arguments": []
               }
             ]
+          },
+          {
+            "$type": "Keyword",
+            "value": "[]",
+            "cardinality": "?"
           }
         ]
       },

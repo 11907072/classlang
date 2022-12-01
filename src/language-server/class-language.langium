@@ -57,7 +57,6 @@ Attribute:
 Element:
     (Class | Enum);
 
-
 Function:
     (name = ID) Inputs ":" (typeOutputDefition=[Element]|TypeOutputDefinition) ;
 
@@ -65,7 +64,7 @@ Inputs:
     "(" ((inputs+=Input) ("," inputs+=Input)*)? ")";
 
 Input:
-    (name = ID) ":" (typeDefinition=[Element]|TypeDefinition);
+    (name = ID) ":" (typeDefinition=[Element]|TypeDefinition) ("[]")?;
 
 TypeDefinition:
     data=("int" | "string" | "DateTime" );
