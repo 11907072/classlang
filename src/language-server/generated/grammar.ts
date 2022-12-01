@@ -19,6 +19,19 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
         "$type": "Group",
         "elements": [
           {
+            "$type": "Assignment",
+            "feature": "imports",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Import"
+              },
+              "arguments": []
+            },
+            "cardinality": "*"
+          },
+          {
             "$type": "Alternatives",
             "elements": [
               {
@@ -47,19 +60,6 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
               }
             ],
             "cardinality": "*"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "relationships",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Relationship"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
           }
         ]
       },
@@ -71,314 +71,13 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
     },
     {
       "$type": "ParserRule",
-      "name": "Relationship",
-      "definition": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "Assignment",
-            "feature": "associations",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Association"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "compositions",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Composition"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "inheritances",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Inheritance"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "aggregations",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Aggregation"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Association",
+      "name": "Import",
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "association"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipItem"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipLabel"
-            },
-            "arguments": [],
-            "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": "<=>"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipItem"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipLabel"
-            },
-            "arguments": [],
-            "cardinality": "?"
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Composition",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "composition"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipItem"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipLabel"
-            },
-            "arguments": [],
-            "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": "=>"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipItem"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipLabel"
-            },
-            "arguments": [],
-            "cardinality": "?"
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Aggregation",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "aggregation"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipItem"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipLabel"
-            },
-            "arguments": [],
-            "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": "=>"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipItem"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipLabel"
-            },
-            "arguments": [],
-            "cardinality": "?"
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Inheritance",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "inheritance"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipItem"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "Keyword",
-            "value": "=>"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "RelationshipItem"
-            },
-            "arguments": []
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "RelationshipItem",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Assignment",
-            "feature": "class",
-            "operator": "=",
-            "terminal": {
-              "$type": "CrossReference",
-              "type": {
-                "$refText": "Class"
-              },
-              "deprecatedSyntax": false
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "cardinality",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Cardinality"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "RelationshipLabel",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "Visibility"
-            },
-            "arguments": []
+            "value": "import"
           },
           {
             "$type": "Assignment",
@@ -391,76 +90,6 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
               },
               "arguments": []
             }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Cardinality",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "("
-          },
-          {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "Assignment",
-                "feature": "from",
-                "operator": "=",
-                "terminal": {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "INT"
-                  },
-                  "arguments": []
-                }
-              },
-              {
-                "$type": "Keyword",
-                "value": ".."
-              }
-            ],
-            "cardinality": "?"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "to",
-            "operator": "=",
-            "terminal": {
-              "$type": "Alternatives",
-              "elements": [
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "INT"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "Keyword",
-                  "value": "*"
-                },
-                {
-                  "$type": "Keyword",
-                  "value": "+"
-                }
-              ]
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": ")"
           }
         ]
       },
@@ -507,16 +136,38 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
             "cardinality": "?"
           },
           {
+            "$type": "Keyword",
+            "value": "{"
+          },
+          {
             "$type": "Assignment",
-            "feature": "classBlock",
-            "operator": "=",
+            "feature": "attributes",
+            "operator": "+=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$refText": "ClassBlock"
+                "$refText": "Attribute"
               },
               "arguments": []
-            }
+            },
+            "cardinality": "*"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "functions",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Function"
+              },
+              "arguments": []
+            },
+            "cardinality": "*"
+          },
+          {
+            "$type": "Keyword",
+            "value": "}"
           }
         ]
       },
@@ -560,131 +211,6 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
     },
     {
       "$type": "ParserRule",
-      "name": "ClassBlock",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "{"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "attributes",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "AttributeChoice"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "functions",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "FunctionChoice"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
-          },
-          {
-            "$type": "Keyword",
-            "value": "}"
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "AttributeChoice",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "attribute"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "Visibility"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "Assignment",
-            "feature": "attribute",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Attribute"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "FunctionChoice",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "function"
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "Visibility"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "Assignment",
-            "feature": "function",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "Function"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
       "name": "Enum",
       "definition": {
         "$type": "Group",
@@ -705,33 +231,6 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
               "arguments": []
             }
           },
-          {
-            "$type": "Assignment",
-            "feature": "enumBlock",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "EnumBlock"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
-      "name": "EnumBlock",
-      "definition": {
-        "$type": "Group",
-        "elements": [
           {
             "$type": "Keyword",
             "value": "{"
@@ -791,6 +290,22 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
         "$type": "Group",
         "elements": [
           {
+            "$type": "Keyword",
+            "value": "attribute"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "visibility",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Visibility"
+              },
+              "arguments": []
+            }
+          },
+          {
             "$type": "Assignment",
             "feature": "name",
             "operator": "=",
@@ -841,39 +356,26 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
     },
     {
       "$type": "ParserRule",
-      "name": "Element",
-      "definition": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "Class"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "Enum"
-            },
-            "arguments": []
-          }
-        ]
-      },
-      "definesHiddenTokens": false,
-      "entry": false,
-      "fragment": false,
-      "hiddenTokens": [],
-      "parameters": [],
-      "wildcard": false
-    },
-    {
-      "$type": "ParserRule",
       "name": "Function",
       "definition": {
         "$type": "Group",
         "elements": [
+          {
+            "$type": "Keyword",
+            "value": "function"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "visibility",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Visibility"
+              },
+              "arguments": []
+            }
+          },
           {
             "$type": "Assignment",
             "feature": "name",
@@ -887,11 +389,25 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
             }
           },
           {
-            "$type": "RuleCall",
-            "rule": {
-              "$refText": "Inputs"
+            "$type": "Keyword",
+            "value": "("
+          },
+          {
+            "$type": "Assignment",
+            "feature": "inputs",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Inputs"
+              },
+              "arguments": []
             },
-            "arguments": []
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": ")"
           },
           {
             "$type": "Keyword",
@@ -932,17 +448,65 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
     },
     {
       "$type": "ParserRule",
+      "name": "Element",
+      "definition": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Class"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Enum"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Import"
+            },
+            "arguments": []
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
       "name": "Inputs",
       "definition": {
         "$type": "Group",
         "elements": [
           {
-            "$type": "Keyword",
-            "value": "("
+            "$type": "Assignment",
+            "feature": "inputs",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Input"
+              },
+              "arguments": []
+            }
           },
           {
             "$type": "Group",
             "elements": [
+              {
+                "$type": "Keyword",
+                "value": ","
+              },
               {
                 "$type": "Assignment",
                 "feature": "inputs",
@@ -954,37 +518,12 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
                   },
                   "arguments": []
                 }
-              },
-              {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "Keyword",
-                    "value": ","
-                  },
-                  {
-                    "$type": "Assignment",
-                    "feature": "inputs",
-                    "operator": "+=",
-                    "terminal": {
-                      "$type": "RuleCall",
-                      "rule": {
-                        "$refText": "Input"
-                      },
-                      "arguments": []
-                    }
-                  }
-                ],
-                "cardinality": "*"
               }
             ],
-            "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": ")"
+            "cardinality": "*"
           }
-        ]
+        ],
+        "cardinality": "?"
       },
       "definesHiddenTokens": false,
       "entry": false,
@@ -1155,45 +694,6 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
     },
     {
       "$type": "TerminalRule",
-      "name": "DATAINT",
-      "definition": {
-        "$type": "CharacterRange",
-        "left": {
-          "$type": "Keyword",
-          "value": "int"
-        }
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "DATASTRING",
-      "definition": {
-        "$type": "CharacterRange",
-        "left": {
-          "$type": "Keyword",
-          "value": "string"
-        }
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "DATADATETIME",
-      "definition": {
-        "$type": "CharacterRange",
-        "left": {
-          "$type": "Keyword",
-          "value": "DateTime"
-        }
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
       "name": "ID",
       "definition": {
         "$type": "RegexToken",
@@ -1222,16 +722,6 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
       "definition": {
         "$type": "RegexToken",
         "regex": "\\"[^\\"]*\\"|'[^']*'"
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "VISIBILITY",
-      "definition": {
-        "$type": "RegexToken",
-        "regex": "[#+-]"
       },
       "fragment": false,
       "hidden": false

@@ -25,20 +25,20 @@ exports.ClassLanguageValidationRegistry = ClassLanguageValidationRegistry;
  */
 class ClassLanguageValidator {
     uniqueAttribute(attribute, accept) {
-        var attributes = this.getParentAttributes(attribute.$container.$container);
+        var attributes = this.getParentAttributes(attribute.$container);
         attributes.forEach(function (choice) {
             if (attribute.name == choice.name && !(attribute === choice)) {
                 accept("error", "attribute names must be unique (in hierarchy)", { node: attribute, property: 'name' });
             }
         });
     }
-    getParentAttributes(classBlock) {
+    getParentAttributes(Class) {
         var returnArray = [];
-        classBlock.attributes.forEach(function (choice) {
-            returnArray.push(choice.attribute);
+        Class.attributes.forEach(function (attribute) {
+            returnArray.push(attribute);
         });
-        if (classBlock.$container.extension != null) {
-            returnArray = returnArray.concat(this.getParentAttributes(classBlock.$container.extension.class.ref.classBlock));
+        if (Class.extension != null) {
+            returnArray = returnArray.concat(this.getParentAttributes(Class.extension.class.ref));
         }
         return returnArray;
     }
@@ -59,20 +59,20 @@ class ClassLanguageValidator {
         });
     }
     uniqueFunction(Function, accept) {
-        var functions = this.getParentFunctions(Function.$container.$container);
+        var functions = this.getParentFunctions(Function.$container);
         functions.forEach(function (choice) {
             if (Function.name == choice.name && !(Function === choice)) {
                 accept("error", "function names must be unique (in hierarchy)", { node: Function, property: 'name' });
             }
         });
     }
-    getParentFunctions(classBlock) {
+    getParentFunctions(Class) {
         var returnArray = [];
-        classBlock.functions.forEach(function (choice) {
-            returnArray.push(choice.function);
+        Class.functions.forEach(function (choice) {
+            returnArray.push(choice);
         });
-        if (classBlock.$container.extension != null) {
-            returnArray = returnArray.concat(this.getParentFunctions(classBlock.$container.extension.class.ref.classBlock));
+        if (Class.extension != null) {
+            returnArray = returnArray.concat(this.getParentFunctions(Class.extension.class.ref));
         }
         return returnArray;
     }

@@ -1,5 +1,5 @@
 import {ValidationAcceptor, ValidationChecks, ValidationRegistry } from 'langium';
-import { ClassBlock ,Attribute, ClassLanguageAstType, Enum, Class, Function } from './generated/ast';
+import { Attribute, ClassLanguageAstType, Enum, Class, Function } from './generated/ast';
 import type { ClassLanguageServices } from './class-language-module';
 
 
@@ -26,7 +26,7 @@ export class ClassLanguageValidationRegistry extends ValidationRegistry {
  */
 export class ClassLanguageValidator {
     uniqueAttribute(attribute: Attribute, accept: ValidationAcceptor) : void {
-        var attributes = this.getParentAttributes(attribute.$container.$container);
+        var attributes = this.getParentAttributes(attribute.$container);
         attributes.forEach( function(choice){
             if(attribute.name == choice.name && !(attribute === choice)){
                 accept("error","attribute names must be unique (in hierarchy)",{node: attribute, property: 'name'});
@@ -34,14 +34,14 @@ export class ClassLanguageValidator {
         })
     }
 
-    getParentAttributes(classBlock: ClassBlock) : Attribute[] {
+    getParentAttributes(Class: Class) : Attribute[] {
         var returnArray: Attribute[] = [];
-        classBlock.attributes.forEach( function (choice){
-            returnArray.push(choice.attribute);
+        Class.attributes.forEach( function (attribute){
+            returnArray.push(attribute);
         }
         )
-        if (classBlock.$container.extension != null){
-                returnArray = returnArray.concat(this.getParentAttributes(classBlock.$container.extension.class.ref!.classBlock));
+        if (Class.extension != null){
+                returnArray = returnArray.concat(this.getParentAttributes(Class.extension.class.ref!));
             
         }
         return returnArray;
@@ -67,7 +67,7 @@ export class ClassLanguageValidator {
     }
 
     uniqueFunction(Function: Function, accept: ValidationAcceptor) : void {
-        var functions = this.getParentFunctions(Function.$container.$container);
+        var functions = this.getParentFunctions(Function.$container);
         functions.forEach(function (choice){
             if(Function.name == choice.name && !(Function === choice)){
                 accept("error","function names must be unique (in hierarchy)",{node:Function, property: 'name'})
@@ -75,13 +75,13 @@ export class ClassLanguageValidator {
         })
     }
 
-    getParentFunctions(classBlock: ClassBlock) : Function[] {
+    getParentFunctions(Class: Class) : Function[] {
         var returnArray: Function[] = [];
-        classBlock.functions.forEach(function (choice){
-            returnArray.push(choice.function);
+        Class.functions.forEach(function (choice){
+            returnArray.push(choice);
         })
-        if(classBlock.$container.extension != null){
-            returnArray = returnArray.concat(this.getParentFunctions(classBlock.$container.extension.class.ref!.classBlock));
+        if(Class.extension != null){
+            returnArray = returnArray.concat(this.getParentFunctions(Class.extension.class.ref!));
         }
         return returnArray;
     }

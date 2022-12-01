@@ -28,14 +28,14 @@ const langium_1 = require("langium");
 const ast = __importStar(require("./generated/ast"));
 class ClassLanguageFormatter extends langium_1.AbstractFormatter {
     format(node) {
-        if (ast.isClassBlock(node)) {
+        if (ast.isClass(node)) {
             const formatter = this.getNodeFormatter(node);
             const bracesOpen = formatter.keyword('{');
             const bracesClose = formatter.keyword('}');
             formatter.interior(bracesOpen, bracesClose).prepend(langium_1.Formatting.indent());
             bracesClose.prepend(langium_1.Formatting.newLine());
         }
-        else if (ast.isEnumBlock(node)) {
+        else if (ast.isEnum(node)) {
             const formatter = this.getNodeFormatter(node);
             const bracesOpen = formatter.keyword('{');
             const bracesClose = formatter.keyword('}');

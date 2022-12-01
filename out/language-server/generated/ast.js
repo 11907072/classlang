@@ -4,36 +4,15 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isVisibility = exports.Visibility = exports.isTypeDefinition = exports.TypeDefinition = exports.isRelationshipLabel = exports.RelationshipLabel = exports.isRelationshipItem = exports.RelationshipItem = exports.isRelationship = exports.Relationship = exports.isModel = exports.Model = exports.isInputs = exports.Inputs = exports.isInput = exports.Input = exports.isFunctionChoice = exports.FunctionChoice = exports.isFunction = exports.Function = exports.isExtension = exports.Extension = exports.isEnumItem = exports.EnumItem = exports.isEnumBlock = exports.EnumBlock = exports.isEnum = exports.Enum = exports.isClassBlock = exports.ClassBlock = exports.isClass = exports.Class = exports.isCardinality = exports.Cardinality = exports.isAttributeChoice = exports.AttributeChoice = exports.isAttribute = exports.Attribute = exports.isTypeOutputDefinition = exports.TypeOutputDefinition = exports.isInheritance = exports.Inheritance = exports.isElement = exports.Element = exports.isComposition = exports.Composition = exports.isAssociation = exports.Association = exports.isAggregation = exports.Aggregation = void 0;
-exports.reflection = exports.ClassLanguageAstReflection = void 0;
+exports.reflection = exports.ClassLanguageAstReflection = exports.isVisibility = exports.Visibility = exports.isTypeDefinition = exports.TypeDefinition = exports.isModel = exports.Model = exports.isInputs = exports.Inputs = exports.isInput = exports.Input = exports.isImport = exports.Import = exports.isFunction = exports.Function = exports.isExtension = exports.Extension = exports.isEnumItem = exports.EnumItem = exports.isEnum = exports.Enum = exports.isClass = exports.Class = exports.isAttribute = exports.Attribute = exports.isTypeOutputDefinition = exports.TypeOutputDefinition = exports.isElement = exports.Element = void 0;
 /* eslint-disable @typescript-eslint/array-type */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 const langium_1 = require("langium");
-exports.Aggregation = 'Aggregation';
-function isAggregation(item) {
-    return exports.reflection.isInstance(item, exports.Aggregation);
-}
-exports.isAggregation = isAggregation;
-exports.Association = 'Association';
-function isAssociation(item) {
-    return exports.reflection.isInstance(item, exports.Association);
-}
-exports.isAssociation = isAssociation;
-exports.Composition = 'Composition';
-function isComposition(item) {
-    return exports.reflection.isInstance(item, exports.Composition);
-}
-exports.isComposition = isComposition;
 exports.Element = 'Element';
 function isElement(item) {
     return exports.reflection.isInstance(item, exports.Element);
 }
 exports.isElement = isElement;
-exports.Inheritance = 'Inheritance';
-function isInheritance(item) {
-    return exports.reflection.isInstance(item, exports.Inheritance);
-}
-exports.isInheritance = isInheritance;
 exports.TypeOutputDefinition = 'TypeOutputDefinition';
 function isTypeOutputDefinition(item) {
     return exports.reflection.isInstance(item, exports.TypeOutputDefinition);
@@ -44,36 +23,16 @@ function isAttribute(item) {
     return exports.reflection.isInstance(item, exports.Attribute);
 }
 exports.isAttribute = isAttribute;
-exports.AttributeChoice = 'AttributeChoice';
-function isAttributeChoice(item) {
-    return exports.reflection.isInstance(item, exports.AttributeChoice);
-}
-exports.isAttributeChoice = isAttributeChoice;
-exports.Cardinality = 'Cardinality';
-function isCardinality(item) {
-    return exports.reflection.isInstance(item, exports.Cardinality);
-}
-exports.isCardinality = isCardinality;
 exports.Class = 'Class';
 function isClass(item) {
     return exports.reflection.isInstance(item, exports.Class);
 }
 exports.isClass = isClass;
-exports.ClassBlock = 'ClassBlock';
-function isClassBlock(item) {
-    return exports.reflection.isInstance(item, exports.ClassBlock);
-}
-exports.isClassBlock = isClassBlock;
 exports.Enum = 'Enum';
 function isEnum(item) {
     return exports.reflection.isInstance(item, exports.Enum);
 }
 exports.isEnum = isEnum;
-exports.EnumBlock = 'EnumBlock';
-function isEnumBlock(item) {
-    return exports.reflection.isInstance(item, exports.EnumBlock);
-}
-exports.isEnumBlock = isEnumBlock;
 exports.EnumItem = 'EnumItem';
 function isEnumItem(item) {
     return exports.reflection.isInstance(item, exports.EnumItem);
@@ -89,11 +48,11 @@ function isFunction(item) {
     return exports.reflection.isInstance(item, exports.Function);
 }
 exports.isFunction = isFunction;
-exports.FunctionChoice = 'FunctionChoice';
-function isFunctionChoice(item) {
-    return exports.reflection.isInstance(item, exports.FunctionChoice);
+exports.Import = 'Import';
+function isImport(item) {
+    return exports.reflection.isInstance(item, exports.Import);
 }
-exports.isFunctionChoice = isFunctionChoice;
+exports.isImport = isImport;
 exports.Input = 'Input';
 function isInput(item) {
     return exports.reflection.isInstance(item, exports.Input);
@@ -109,21 +68,6 @@ function isModel(item) {
     return exports.reflection.isInstance(item, exports.Model);
 }
 exports.isModel = isModel;
-exports.Relationship = 'Relationship';
-function isRelationship(item) {
-    return exports.reflection.isInstance(item, exports.Relationship);
-}
-exports.isRelationship = isRelationship;
-exports.RelationshipItem = 'RelationshipItem';
-function isRelationshipItem(item) {
-    return exports.reflection.isInstance(item, exports.RelationshipItem);
-}
-exports.isRelationshipItem = isRelationshipItem;
-exports.RelationshipLabel = 'RelationshipLabel';
-function isRelationshipLabel(item) {
-    return exports.reflection.isInstance(item, exports.RelationshipLabel);
-}
-exports.isRelationshipLabel = isRelationshipLabel;
 exports.TypeDefinition = 'TypeDefinition';
 function isTypeDefinition(item) {
     return exports.reflection.isInstance(item, exports.TypeDefinition);
@@ -136,7 +80,7 @@ function isVisibility(item) {
 exports.isVisibility = isVisibility;
 class ClassLanguageAstReflection {
     getAllTypes() {
-        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Element', 'Enum', 'EnumBlock', 'EnumItem', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Input', 'Inputs', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition', 'TypeOutputDefinition', 'Visibility'];
+        return ['Attribute', 'Class', 'Element', 'Enum', 'EnumItem', 'Extension', 'Function', 'Import', 'Input', 'Inputs', 'Model', 'TypeDefinition', 'TypeOutputDefinition', 'Visibility'];
     }
     isInstance(node, type) {
         return (0, langium_1.isAstNode)(node) && this.isSubtype(node.$type, type);
@@ -147,14 +91,9 @@ class ClassLanguageAstReflection {
         }
         switch (subtype) {
             case exports.Class:
-            case exports.Enum: {
+            case exports.Enum:
+            case exports.Import: {
                 return this.isSubtype(exports.Element, supertype);
-            }
-            case exports.RelationshipItem: {
-                return this.isSubtype(exports.Association, supertype) || this.isSubtype(exports.Composition, supertype) || this.isSubtype(exports.Aggregation, supertype) || this.isSubtype(exports.Inheritance, supertype);
-            }
-            case exports.RelationshipLabel: {
-                return this.isSubtype(exports.Association, supertype) || this.isSubtype(exports.Composition, supertype) || this.isSubtype(exports.Aggregation, supertype);
             }
             case exports.TypeDefinition: {
                 return this.isSubtype(exports.TypeOutputDefinition, supertype);
@@ -179,9 +118,6 @@ class ClassLanguageAstReflection {
             case 'Input:typeDefinition': {
                 return exports.Element;
             }
-            case 'RelationshipItem:class': {
-                return exports.Class;
-            }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);
             }
@@ -189,18 +125,18 @@ class ClassLanguageAstReflection {
     }
     getTypeMetaData(type) {
         switch (type) {
-            case 'ClassBlock': {
+            case 'Class': {
                 return {
-                    name: 'ClassBlock',
+                    name: 'Class',
                     mandatory: [
                         { name: 'attributes', type: 'array' },
                         { name: 'functions', type: 'array' }
                     ]
                 };
             }
-            case 'EnumBlock': {
+            case 'Enum': {
                 return {
-                    name: 'EnumBlock',
+                    name: 'Enum',
                     mandatory: [
                         { name: 'enumItems', type: 'array' }
                     ]
@@ -220,18 +156,7 @@ class ClassLanguageAstReflection {
                     mandatory: [
                         { name: 'classes', type: 'array' },
                         { name: 'enums', type: 'array' },
-                        { name: 'relationships', type: 'array' }
-                    ]
-                };
-            }
-            case 'Relationship': {
-                return {
-                    name: 'Relationship',
-                    mandatory: [
-                        { name: 'aggregations', type: 'array' },
-                        { name: 'associations', type: 'array' },
-                        { name: 'compositions', type: 'array' },
-                        { name: 'inheritances', type: 'array' }
+                        { name: 'imports', type: 'array' }
                     ]
                 };
             }
