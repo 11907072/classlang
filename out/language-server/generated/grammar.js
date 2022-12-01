@@ -377,7 +377,7 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
           {
             "$type": "RuleCall",
             "rule": {
-              "$refText": "VISIBILITY"
+              "$refText": "Visibility"
             },
             "arguments": []
           },
@@ -599,7 +599,7 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
           {
             "$type": "RuleCall",
             "rule": {
-              "$refText": "VISIBILITY"
+              "$refText": "Visibility"
             },
             "arguments": []
           },
@@ -637,7 +637,7 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
           {
             "$type": "RuleCall",
             "rule": {
-              "$refText": "VISIBILITY"
+              "$refText": "Visibility"
             },
             "arguments": []
           },
@@ -866,40 +866,157 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
             }
           },
           {
-            "$type": "Keyword",
-            "value": "("
-          },
-          {
-            "$type": "Keyword",
-            "value": ")"
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Inputs"
+            },
+            "arguments": []
           },
           {
             "$type": "Keyword",
             "value": ":"
           },
           {
-            "$type": "Assignment",
-            "feature": "typeOutputDefition",
-            "operator": "=",
-            "terminal": {
-              "$type": "Alternatives",
-              "elements": [
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$refText": "TypeOutputDefinition"
+            "$type": "Alternatives",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "typeOutputDefition",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Element"
                   },
-                  "arguments": []
+                  "deprecatedSyntax": false
+                }
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$refText": "TypeOutputDefinition"
                 },
-                {
+                "arguments": []
+              }
+            ]
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Inputs",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "("
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "inputs",
+                "operator": "+=",
+                "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$refText": "EnumReference"
+                    "$refText": "Input"
                   },
                   "arguments": []
                 }
-              ]
+              },
+              {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Keyword",
+                    "value": ","
+                  },
+                  {
+                    "$type": "Assignment",
+                    "feature": "inputs",
+                    "operator": "+=",
+                    "terminal": {
+                      "$type": "RuleCall",
+                      "rule": {
+                        "$refText": "Input"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "cardinality": "*"
+              }
+            ],
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": ")"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Input",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "ID"
+              },
+              "arguments": []
             }
+          },
+          {
+            "$type": "Keyword",
+            "value": ":"
+          },
+          {
+            "$type": "Alternatives",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "typeDefinition",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Element"
+                  },
+                  "deprecatedSyntax": false
+                }
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$refText": "TypeDefinition"
+                },
+                "arguments": []
+              }
+            ]
           }
         ]
       },
@@ -944,17 +1061,27 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
     },
     {
       "$type": "ParserRule",
-      "name": "EnumReference",
+      "name": "Visibility",
       "definition": {
         "$type": "Assignment",
-        "feature": "enum",
+        "feature": "visibility",
         "operator": "=",
         "terminal": {
-          "$type": "CrossReference",
-          "type": {
-            "$refText": "Enum"
-          },
-          "deprecatedSyntax": false
+          "$type": "Alternatives",
+          "elements": [
+            {
+              "$type": "Keyword",
+              "value": "#"
+            },
+            {
+              "$type": "Keyword",
+              "value": "+"
+            },
+            {
+              "$type": "Keyword",
+              "value": "-"
+            }
+          ]
         }
       },
       "definesHiddenTokens": false,

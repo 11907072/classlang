@@ -22,7 +22,7 @@ RelationshipItem:
     class=[Class] cardinality=Cardinality;
 
 RelationshipLabel:
-    VISIBILITY name=ID;
+    Visibility name=ID;
 
 Cardinality:
     "(" amt=(INT|"*"|"+")")";
@@ -37,10 +37,10 @@ ClassBlock:
     '{' (attributes += AttributeChoice)* (functions += FunctionChoice)* '}';
     
 AttributeChoice:
-    'attribute' VISIBILITY (attribute=Attribute);
+    'attribute' Visibility (attribute=Attribute);
 
 FunctionChoice:
-    'function' VISIBILITY (function = Function);
+    'function' Visibility (function = Function);
 
 Enum:
     'Enum' (name=ID) enumBlock=EnumBlock;
@@ -59,13 +59,20 @@ Element:
 
 
 Function:
-    (name = ID) "("  ")" ":" typeOutputDefition=(TypeOutputDefinition|EnumReference) ;
+    (name = ID) Inputs ":" (typeOutputDefition=[Element]|TypeOutputDefinition) ;
+
+Inputs:
+    "(" ((inputs+=Input) ("," inputs+=Input)*)? ")";
+
+Input:
+    (name = ID) ":" (typeDefinition=[Element]|TypeDefinition);
 
 TypeDefinition:
     data=("int" | "string" | "DateTime" );
 
-EnumReference:
-    enum=[Enum];
+Visibility:
+    visibility=('#'|'+'|'-');
+
 
 TypeOutputDefinition:
     TypeDefinition | "void";
