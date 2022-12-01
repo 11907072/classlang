@@ -25,7 +25,7 @@ RelationshipLabel:
     Visibility name=ID;
 
 Cardinality:
-    "(" amt=(INT|"*"|"+")")";
+    "(" ((from=INT)'..')? to=(INT|"*"|"+")")";
 
 Class:
     'Class' (name = ID) extension=(Extension)? classBlock=ClassBlock;

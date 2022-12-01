@@ -80,7 +80,8 @@ export function isAttributeChoice(item: unknown): item is AttributeChoice {
 
 export interface Cardinality extends AstNode {
     readonly $container: RelationshipItem;
-    amt: '*' | '+' | number
+    from?: number
+    to: '*' | '+' | number
 }
 
 export const Cardinality = 'Cardinality';

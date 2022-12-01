@@ -413,8 +413,30 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
             "value": "("
           },
           {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "from",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "INT"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": ".."
+              }
+            ],
+            "cardinality": "?"
+          },
+          {
             "$type": "Assignment",
-            "feature": "amt",
+            "feature": "to",
             "operator": "=",
             "terminal": {
               "$type": "Alternatives",
