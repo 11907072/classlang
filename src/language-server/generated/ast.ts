@@ -23,6 +23,18 @@ export function isTypeOutputDefinition(item: unknown): item is TypeOutputDefinit
     return reflection.isInstance(item, TypeOutputDefinition);
 }
 
+export interface AbstractClass extends AstNode {
+    readonly $container: Model;
+    functions: Array<Function>
+    name: string
+}
+
+export const AbstractClass = 'AbstractClass';
+
+export function isAbstractClass(item: unknown): item is AbstractClass {
+    return reflection.isInstance(item, AbstractClass);
+}
+
 export interface Attribute extends AstNode {
     readonly $container: Class;
     name: string
@@ -41,6 +53,7 @@ export interface Class extends AstNode {
     attributes: Array<Attribute>
     extension?: Extension
     functions: Array<Function>
+    implementation?: Implementation
     name: string
 }
 
@@ -85,7 +98,7 @@ export function isExtension(item: unknown): item is Extension {
 }
 
 export interface Function extends AstNode {
-    readonly $container: Class;
+    readonly $container: AbstractClass | Class;
     inputs?: Inputs
     name: string
     typeOutputDefition: Reference<Element>
@@ -96,6 +109,17 @@ export const Function = 'Function';
 
 export function isFunction(item: unknown): item is Function {
     return reflection.isInstance(item, Function);
+}
+
+export interface Implementation extends AstNode {
+    readonly $container: Class;
+    abstractClass: Reference<AbstractClass>
+}
+
+export const Implementation = 'Implementation';
+
+export function isImplementation(item: unknown): item is Implementation {
+    return reflection.isInstance(item, Implementation);
 }
 
 export interface Import extends AstNode {
@@ -133,6 +157,7 @@ export function isInputs(item: unknown): item is Inputs {
 }
 
 export interface Model extends AstNode {
+    abstractClasses: Array<AbstractClass>
     classes: Array<Class>
     enums: Array<Enum>
     imports: Array<Import>
@@ -165,12 +190,12 @@ export function isVisibility(item: unknown): item is Visibility {
     return reflection.isInstance(item, Visibility);
 }
 
-export type ClassLanguageAstType = 'Attribute' | 'Class' | 'Element' | 'Enum' | 'EnumItem' | 'Extension' | 'Function' | 'Import' | 'Input' | 'Inputs' | 'Model' | 'TypeDefinition' | 'TypeOutputDefinition' | 'Visibility';
+export type ClassLanguageAstType = 'AbstractClass' | 'Attribute' | 'Class' | 'Element' | 'Enum' | 'EnumItem' | 'Extension' | 'Function' | 'Implementation' | 'Import' | 'Input' | 'Inputs' | 'Model' | 'TypeDefinition' | 'TypeOutputDefinition' | 'Visibility';
 
 export class ClassLanguageAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['Attribute', 'Class', 'Element', 'Enum', 'EnumItem', 'Extension', 'Function', 'Import', 'Input', 'Inputs', 'Model', 'TypeDefinition', 'TypeOutputDefinition', 'Visibility'];
+        return ['AbstractClass', 'Attribute', 'Class', 'Element', 'Enum', 'EnumItem', 'Extension', 'Function', 'Implementation', 'Import', 'Input', 'Inputs', 'Model', 'TypeDefinition', 'TypeOutputDefinition', 'Visibility'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -208,6 +233,9 @@ export class ClassLanguageAstReflection implements AstReflection {
             case 'Function:typeOutputDefition': {
                 return Element;
             }
+            case 'Implementation:abstractClass': {
+                return AbstractClass;
+            }
             case 'Input:typeDefinition': {
                 return Element;
             }
@@ -219,6 +247,14 @@ export class ClassLanguageAstReflection implements AstReflection {
 
     getTypeMetaData(type: string): TypeMetaData {
         switch (type) {
+            case 'AbstractClass': {
+                return {
+                    name: 'AbstractClass',
+                    mandatory: [
+                        { name: 'functions', type: 'array' }
+                    ]
+                };
+            }
             case 'Class': {
                 return {
                     name: 'Class',
@@ -248,6 +284,7 @@ export class ClassLanguageAstReflection implements AstReflection {
                 return {
                     name: 'Model',
                     mandatory: [
+                        { name: 'abstractClasses', type: 'array' },
                         { name: 'classes', type: 'array' },
                         { name: 'enums', type: 'array' },
                         { name: 'imports', type: 'array' }

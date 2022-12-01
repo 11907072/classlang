@@ -1,16 +1,22 @@
 grammar ClassLanguage
 
 entry Model:
-    (imports+=Import)* (classes+=Class | enums+=Enum )*;
+    (imports+=Import)* (classes+=Class | enums+=Enum |abstractClasses+=AbstractClass )*;
 
 Import:
     'import' name=ID;
 
 Class:
-    'Class' (name = ID) extension=(Extension)? '{' (attributes += Attribute)* (functions += Function)* '}';
+    'Class' (name = ID) extension=(Extension)? implementation=(Implementation)? '{' (attributes += Attribute)* (functions += Function)* '}';
 
 Extension:
     'extends' class=[Class];
+
+Implementation:
+    'implements' abstractClass=[AbstractClass];
+
+AbstractClass:
+    'abstract' 'Class' (name = ID) '{' (functions += Function)* '}';
 
 Enum:
     'Enum' (name=ID) '{' (enumItems+=EnumItem)* '}';

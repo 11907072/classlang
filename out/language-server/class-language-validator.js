@@ -11,9 +11,9 @@ class ClassLanguageValidationRegistry extends langium_1.ValidationRegistry {
         const validator = services.validation.ClassLanguageValidator;
         const checks = {
             Attribute: validator.uniqueAttribute,
-            Enum: validator.uniqueEnum,
-            Class: [validator.validExtension,
-                validator.uniqueClass],
+            Enum: [validator.uniqueContainerName],
+            Class: [validator.validExtension, validator.uniqueContainerName],
+            AbstractClass: [validator.uniqueContainerName],
             Function: validator.uniqueFunction
         };
         this.register(checks, validator);
@@ -24,6 +24,33 @@ exports.ClassLanguageValidationRegistry = ClassLanguageValidationRegistry;
  * Implementation of custom validations.
  */
 class ClassLanguageValidator {
+    uniqueContainerName(object, accept) {
+        var names = this.getAllOtherNames(object);
+        names.forEach(function (name) {
+            if (object.name == name) {
+                accept("error", "names of classes, enums and abstract classes have to be unique", { node: object, property: 'name' });
+            }
+        });
+    }
+    getAllOtherNames(object) {
+        var names = [];
+        object.$container.classes.forEach(function (Class) {
+            if (!(object === Class)) {
+                names.push(Class.name);
+            }
+        });
+        object.$container.enums.forEach(function (Enum) {
+            if (!(object === Enum)) {
+                names.push(Enum.name);
+            }
+        });
+        object.$container.abstractClasses.forEach(function (AbstractClass) {
+            if (!(object === AbstractClass)) {
+                names.push(AbstractClass.name);
+            }
+        });
+        return names;
+    }
     uniqueAttribute(attribute, accept) {
         var attributes = this.getParentAttributes(attribute.$container);
         attributes.forEach(function (choice) {
@@ -42,24 +69,16 @@ class ClassLanguageValidator {
         }
         return returnArray;
     }
-    uniqueEnum(Enum, accept) {
-        var enums = Enum.$container.enums;
-        enums.forEach(function (choice) {
-            if (choice.name == Enum.name && !(choice === Enum)) {
-                accept("error", "enum names must be unique (globally)", { node: Enum, property: 'name' });
-            }
-        });
-    }
-    uniqueClass(Class, accept) {
-        var classes = Class.$container.classes;
-        classes.forEach(function (choice) {
-            if (Class.name == choice.name && !(choice === Class)) {
-                accept("error", "class names must be unique (globally)", { node: Class, property: 'name' });
-            }
-        });
-    }
     uniqueFunction(Function, accept) {
-        var functions = this.getParentFunctions(Function.$container);
+        var container;
+        if (Function.$container.$type == "AbstractClass") {
+            container = Function.$container;
+            var functions = this.getAbstractParentFunctions(container);
+        }
+        else {
+            container = Function.$container;
+            var functions = this.getParentFunctions(container);
+        }
         functions.forEach(function (choice) {
             if (Function.name == choice.name && !(Function === choice)) {
                 accept("error", "function names must be unique (in hierarchy)", { node: Function, property: 'name' });
@@ -67,6 +86,7 @@ class ClassLanguageValidator {
         });
     }
     getParentFunctions(Class) {
+        var _a;
         var returnArray = [];
         Class.functions.forEach(function (choice) {
             returnArray.push(choice);
@@ -74,6 +94,16 @@ class ClassLanguageValidator {
         if (Class.extension != null) {
             returnArray = returnArray.concat(this.getParentFunctions(Class.extension.class.ref));
         }
+        if (Class.implementation != null) {
+            returnArray = returnArray.concat(this.getAbstractParentFunctions((_a = Class.implementation) === null || _a === void 0 ? void 0 : _a.abstractClass.ref));
+        }
+        return returnArray;
+    }
+    getAbstractParentFunctions(AbstractClass) {
+        var returnArray = [];
+        AbstractClass.functions.forEach(function (choice) {
+            returnArray.push(choice);
+        });
         return returnArray;
     }
     validExtension(Class, accept) {

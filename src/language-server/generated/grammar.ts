@@ -57,6 +57,18 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
                   },
                   "arguments": []
                 }
+              },
+              {
+                "$type": "Assignment",
+                "feature": "abstractClasses",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "AbstractClass"
+                  },
+                  "arguments": []
+                }
               }
             ],
             "cardinality": "*"
@@ -136,6 +148,19 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
             "cardinality": "?"
           },
           {
+            "$type": "Assignment",
+            "feature": "implementation",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Implementation"
+              },
+              "arguments": []
+            },
+            "cardinality": "?"
+          },
+          {
             "$type": "Keyword",
             "value": "{"
           },
@@ -199,6 +224,93 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
               },
               "deprecatedSyntax": false
             }
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Implementation",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "implements"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "abstractClass",
+            "operator": "=",
+            "terminal": {
+              "$type": "CrossReference",
+              "type": {
+                "$refText": "AbstractClass"
+              },
+              "deprecatedSyntax": false
+            }
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "AbstractClass",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "abstract"
+          },
+          {
+            "$type": "Keyword",
+            "value": "Class"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "ID"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "{"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "functions",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$refText": "Function"
+              },
+              "arguments": []
+            },
+            "cardinality": "*"
+          },
+          {
+            "$type": "Keyword",
+            "value": "}"
           }
         ]
       },

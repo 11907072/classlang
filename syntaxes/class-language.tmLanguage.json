@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.class-language",
-      "match": "\\b(attribute|Class|DateTime|Enum|extends|function|import|int|string|void)\\b"
+      "match": "\\b(abstract|attribute|Class|DateTime|Enum|extends|function|implements|import|int|string|void)\\b"
     },
     {
       "name": "string.quoted.double.class-language",

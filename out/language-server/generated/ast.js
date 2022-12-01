@@ -4,7 +4,7 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reflection = exports.ClassLanguageAstReflection = exports.isVisibility = exports.Visibility = exports.isTypeDefinition = exports.TypeDefinition = exports.isModel = exports.Model = exports.isInputs = exports.Inputs = exports.isInput = exports.Input = exports.isImport = exports.Import = exports.isFunction = exports.Function = exports.isExtension = exports.Extension = exports.isEnumItem = exports.EnumItem = exports.isEnum = exports.Enum = exports.isClass = exports.Class = exports.isAttribute = exports.Attribute = exports.isTypeOutputDefinition = exports.TypeOutputDefinition = exports.isElement = exports.Element = void 0;
+exports.reflection = exports.ClassLanguageAstReflection = exports.isVisibility = exports.Visibility = exports.isTypeDefinition = exports.TypeDefinition = exports.isModel = exports.Model = exports.isInputs = exports.Inputs = exports.isInput = exports.Input = exports.isImport = exports.Import = exports.isImplementation = exports.Implementation = exports.isFunction = exports.Function = exports.isExtension = exports.Extension = exports.isEnumItem = exports.EnumItem = exports.isEnum = exports.Enum = exports.isClass = exports.Class = exports.isAttribute = exports.Attribute = exports.isAbstractClass = exports.AbstractClass = exports.isTypeOutputDefinition = exports.TypeOutputDefinition = exports.isElement = exports.Element = void 0;
 /* eslint-disable @typescript-eslint/array-type */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 const langium_1 = require("langium");
@@ -18,6 +18,11 @@ function isTypeOutputDefinition(item) {
     return exports.reflection.isInstance(item, exports.TypeOutputDefinition);
 }
 exports.isTypeOutputDefinition = isTypeOutputDefinition;
+exports.AbstractClass = 'AbstractClass';
+function isAbstractClass(item) {
+    return exports.reflection.isInstance(item, exports.AbstractClass);
+}
+exports.isAbstractClass = isAbstractClass;
 exports.Attribute = 'Attribute';
 function isAttribute(item) {
     return exports.reflection.isInstance(item, exports.Attribute);
@@ -48,6 +53,11 @@ function isFunction(item) {
     return exports.reflection.isInstance(item, exports.Function);
 }
 exports.isFunction = isFunction;
+exports.Implementation = 'Implementation';
+function isImplementation(item) {
+    return exports.reflection.isInstance(item, exports.Implementation);
+}
+exports.isImplementation = isImplementation;
 exports.Import = 'Import';
 function isImport(item) {
     return exports.reflection.isInstance(item, exports.Import);
@@ -80,7 +90,7 @@ function isVisibility(item) {
 exports.isVisibility = isVisibility;
 class ClassLanguageAstReflection {
     getAllTypes() {
-        return ['Attribute', 'Class', 'Element', 'Enum', 'EnumItem', 'Extension', 'Function', 'Import', 'Input', 'Inputs', 'Model', 'TypeDefinition', 'TypeOutputDefinition', 'Visibility'];
+        return ['AbstractClass', 'Attribute', 'Class', 'Element', 'Enum', 'EnumItem', 'Extension', 'Function', 'Implementation', 'Import', 'Input', 'Inputs', 'Model', 'TypeDefinition', 'TypeOutputDefinition', 'Visibility'];
     }
     isInstance(node, type) {
         return (0, langium_1.isAstNode)(node) && this.isSubtype(node.$type, type);
@@ -115,6 +125,9 @@ class ClassLanguageAstReflection {
             case 'Function:typeOutputDefition': {
                 return exports.Element;
             }
+            case 'Implementation:abstractClass': {
+                return exports.AbstractClass;
+            }
             case 'Input:typeDefinition': {
                 return exports.Element;
             }
@@ -125,6 +138,14 @@ class ClassLanguageAstReflection {
     }
     getTypeMetaData(type) {
         switch (type) {
+            case 'AbstractClass': {
+                return {
+                    name: 'AbstractClass',
+                    mandatory: [
+                        { name: 'functions', type: 'array' }
+                    ]
+                };
+            }
             case 'Class': {
                 return {
                     name: 'Class',
@@ -154,6 +175,7 @@ class ClassLanguageAstReflection {
                 return {
                     name: 'Model',
                     mandatory: [
+                        { name: 'abstractClasses', type: 'array' },
                         { name: 'classes', type: 'array' },
                         { name: 'enums', type: 'array' },
                         { name: 'imports', type: 'array' }
