@@ -42,6 +42,13 @@ class ClassLanguageFormatter extends langium_1.AbstractFormatter {
             formatter.interior(bracesOpen, bracesClose).prepend(langium_1.Formatting.indent());
             bracesClose.prepend(langium_1.Formatting.newLine());
         }
+        else if (ast.isAbstractClass(node)) {
+            const formatter = this.getNodeFormatter(node);
+            const bracesOpen = formatter.keyword('{');
+            const bracesClose = formatter.keyword('}');
+            formatter.interior(bracesOpen, bracesClose).prepend(langium_1.Formatting.indent());
+            bracesClose.prepend(langium_1.Formatting.newLine());
+        }
     }
 }
 exports.ClassLanguageFormatter = ClassLanguageFormatter;
