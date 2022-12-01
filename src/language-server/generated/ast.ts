@@ -31,6 +31,14 @@ export function isComposition(item: unknown): item is Composition {
     return reflection.isInstance(item, Composition);
 }
 
+export type Element = Class | Enum;
+
+export const Element = 'Element';
+
+export function isElement(item: unknown): item is Element {
+    return reflection.isInstance(item, Element);
+}
+
 export type Inheritance = RelationshipItem;
 
 export const Inheritance = 'Inheritance';
@@ -50,7 +58,7 @@ export function isTypeOutputDefinition(item: unknown): item is TypeOutputDefinit
 export interface Attribute extends AstNode {
     readonly $container: AttributeChoice;
     name: string
-    typeDefinition: TypeDefinition
+    typeDefinition: Reference<Element>
 }
 
 export const Attribute = 'Attribute';
@@ -235,7 +243,7 @@ export function isRelationshipLabel(item: unknown): item is RelationshipLabel {
 }
 
 export interface TypeDefinition extends AstNode {
-    readonly $container: Attribute | Function;
+    readonly $container: Function;
     data: 'DateTime' | 'int' | 'string'
 }
 
@@ -245,12 +253,12 @@ export function isTypeDefinition(item: unknown): item is TypeDefinition {
     return reflection.isInstance(item, TypeDefinition);
 }
 
-export type ClassLanguageAstType = 'Aggregation' | 'Association' | 'Attribute' | 'AttributeChoice' | 'Cardinality' | 'Class' | 'ClassBlock' | 'Composition' | 'Enum' | 'EnumBlock' | 'EnumItem' | 'EnumReference' | 'Extension' | 'Function' | 'FunctionChoice' | 'Inheritance' | 'Model' | 'Relationship' | 'RelationshipItem' | 'RelationshipLabel' | 'TypeDefinition' | 'TypeOutputDefinition';
+export type ClassLanguageAstType = 'Aggregation' | 'Association' | 'Attribute' | 'AttributeChoice' | 'Cardinality' | 'Class' | 'ClassBlock' | 'Composition' | 'Element' | 'Enum' | 'EnumBlock' | 'EnumItem' | 'EnumReference' | 'Extension' | 'Function' | 'FunctionChoice' | 'Inheritance' | 'Model' | 'Relationship' | 'RelationshipItem' | 'RelationshipLabel' | 'TypeDefinition' | 'TypeOutputDefinition';
 
 export class ClassLanguageAstReflection implements AstReflection {
 
     getAllTypes(): string[] {
-        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Enum', 'EnumBlock', 'EnumItem', 'EnumReference', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition', 'TypeOutputDefinition'];
+        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Element', 'Enum', 'EnumBlock', 'EnumItem', 'EnumReference', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition', 'TypeOutputDefinition'];
     }
 
     isInstance(node: unknown, type: string): boolean {
@@ -262,6 +270,10 @@ export class ClassLanguageAstReflection implements AstReflection {
             return true;
         }
         switch (subtype) {
+            case Class:
+            case Enum: {
+                return this.isSubtype(Element, supertype);
+            }
             case RelationshipItem: {
                 return this.isSubtype(Association, supertype) || this.isSubtype(Composition, supertype) || this.isSubtype(Aggregation, supertype) || this.isSubtype(Inheritance, supertype);
             }
@@ -280,6 +292,9 @@ export class ClassLanguageAstReflection implements AstReflection {
     getReferenceType(refInfo: ReferenceInfo): string {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
+            case 'Attribute:typeDefinition': {
+                return Element;
+            }
             case 'EnumReference:enum': {
                 return Enum;
             }

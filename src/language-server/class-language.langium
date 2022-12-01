@@ -52,13 +52,17 @@ EnumItem:
     (name = ID);
 
 Attribute:
-     (name = ID) ":" typeDefinition=TypeDefinition;
+     (name = ID) ":" (typeDefinition=[Element]|TypeDefinition);
+
+Element:
+    (Class | Enum);
+
 
 Function:
     (name = ID) "("  ")" ":" typeOutputDefition=(TypeOutputDefinition|EnumReference) ;
 
 TypeDefinition:
-    data=("int" | "string" | "DateTime");
+    data=("int" | "string" | "DateTime" );
 
 EnumReference:
     enum=[Enum];

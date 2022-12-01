@@ -4,7 +4,7 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reflection = exports.ClassLanguageAstReflection = exports.isTypeDefinition = exports.TypeDefinition = exports.isRelationshipLabel = exports.RelationshipLabel = exports.isRelationshipItem = exports.RelationshipItem = exports.isRelationship = exports.Relationship = exports.isModel = exports.Model = exports.isFunctionChoice = exports.FunctionChoice = exports.isFunction = exports.Function = exports.isExtension = exports.Extension = exports.isEnumItem = exports.EnumItem = exports.isEnumBlock = exports.EnumBlock = exports.isEnum = exports.Enum = exports.isClassBlock = exports.ClassBlock = exports.isClass = exports.Class = exports.isCardinality = exports.Cardinality = exports.isAttributeChoice = exports.AttributeChoice = exports.isAttribute = exports.Attribute = exports.isInheritance = exports.Inheritance = exports.isComposition = exports.Composition = exports.isAssociation = exports.Association = exports.isAggregation = exports.Aggregation = void 0;
+exports.reflection = exports.ClassLanguageAstReflection = exports.isTypeDefinition = exports.TypeDefinition = exports.isRelationshipLabel = exports.RelationshipLabel = exports.isRelationshipItem = exports.RelationshipItem = exports.isRelationship = exports.Relationship = exports.isModel = exports.Model = exports.isFunctionChoice = exports.FunctionChoice = exports.isFunction = exports.Function = exports.isExtension = exports.Extension = exports.isEnumReference = exports.EnumReference = exports.isEnumItem = exports.EnumItem = exports.isEnumBlock = exports.EnumBlock = exports.isEnum = exports.Enum = exports.isClassBlock = exports.ClassBlock = exports.isClass = exports.Class = exports.isCardinality = exports.Cardinality = exports.isAttributeChoice = exports.AttributeChoice = exports.isAttribute = exports.Attribute = exports.isTypeOutputDefinition = exports.TypeOutputDefinition = exports.isInheritance = exports.Inheritance = exports.isElement = exports.Element = exports.isComposition = exports.Composition = exports.isAssociation = exports.Association = exports.isAggregation = exports.Aggregation = void 0;
 /* eslint-disable @typescript-eslint/array-type */
 /* eslint-disable @typescript-eslint/no-empty-interface */
 const langium_1 = require("langium");
@@ -23,11 +23,21 @@ function isComposition(item) {
     return exports.reflection.isInstance(item, exports.Composition);
 }
 exports.isComposition = isComposition;
+exports.Element = 'Element';
+function isElement(item) {
+    return exports.reflection.isInstance(item, exports.Element);
+}
+exports.isElement = isElement;
 exports.Inheritance = 'Inheritance';
 function isInheritance(item) {
     return exports.reflection.isInstance(item, exports.Inheritance);
 }
 exports.isInheritance = isInheritance;
+exports.TypeOutputDefinition = 'TypeOutputDefinition';
+function isTypeOutputDefinition(item) {
+    return exports.reflection.isInstance(item, exports.TypeOutputDefinition);
+}
+exports.isTypeOutputDefinition = isTypeOutputDefinition;
 exports.Attribute = 'Attribute';
 function isAttribute(item) {
     return exports.reflection.isInstance(item, exports.Attribute);
@@ -68,6 +78,11 @@ function isEnumItem(item) {
     return exports.reflection.isInstance(item, exports.EnumItem);
 }
 exports.isEnumItem = isEnumItem;
+exports.EnumReference = 'EnumReference';
+function isEnumReference(item) {
+    return exports.reflection.isInstance(item, exports.EnumReference);
+}
+exports.isEnumReference = isEnumReference;
 exports.Extension = 'Extension';
 function isExtension(item) {
     return exports.reflection.isInstance(item, exports.Extension);
@@ -110,7 +125,7 @@ function isTypeDefinition(item) {
 exports.isTypeDefinition = isTypeDefinition;
 class ClassLanguageAstReflection {
     getAllTypes() {
-        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Enum', 'EnumBlock', 'EnumItem', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition'];
+        return ['Aggregation', 'Association', 'Attribute', 'AttributeChoice', 'Cardinality', 'Class', 'ClassBlock', 'Composition', 'Element', 'Enum', 'EnumBlock', 'EnumItem', 'EnumReference', 'Extension', 'Function', 'FunctionChoice', 'Inheritance', 'Model', 'Relationship', 'RelationshipItem', 'RelationshipLabel', 'TypeDefinition', 'TypeOutputDefinition'];
     }
     isInstance(node, type) {
         return (0, langium_1.isAstNode)(node) && this.isSubtype(node.$type, type);
@@ -120,11 +135,18 @@ class ClassLanguageAstReflection {
             return true;
         }
         switch (subtype) {
+            case exports.Class:
+            case exports.Enum: {
+                return this.isSubtype(exports.Element, supertype);
+            }
             case exports.RelationshipItem: {
                 return this.isSubtype(exports.Association, supertype) || this.isSubtype(exports.Composition, supertype) || this.isSubtype(exports.Aggregation, supertype) || this.isSubtype(exports.Inheritance, supertype);
             }
             case exports.RelationshipLabel: {
                 return this.isSubtype(exports.Association, supertype) || this.isSubtype(exports.Composition, supertype) || this.isSubtype(exports.Aggregation, supertype);
+            }
+            case exports.TypeDefinition: {
+                return this.isSubtype(exports.TypeOutputDefinition, supertype);
             }
             default: {
                 return false;
@@ -134,14 +156,17 @@ class ClassLanguageAstReflection {
     getReferenceType(refInfo) {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
+            case 'Attribute:typeDefinition': {
+                return exports.Element;
+            }
+            case 'EnumReference:enum': {
+                return exports.Enum;
+            }
             case 'Extension:class': {
                 return exports.Class;
             }
             case 'RelationshipItem:class': {
                 return exports.Class;
-            }
-            case 'TypeDefinition:enum': {
-                return exports.Enum;
             }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);

@@ -786,16 +786,57 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
             "value": ":"
           },
           {
-            "$type": "Assignment",
-            "feature": "typeDefinition",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "TypeDefinition"
+            "$type": "Alternatives",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "typeDefinition",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Element"
+                  },
+                  "deprecatedSyntax": false
+                }
               },
-              "arguments": []
-            }
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$refText": "TypeDefinition"
+                },
+                "arguments": []
+              }
+            ]
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Element",
+      "definition": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Class"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Enum"
+            },
+            "arguments": []
           }
         ]
       },
@@ -826,33 +867,39 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
           },
           {
             "$type": "Keyword",
+            "value": "("
+          },
+          {
+            "$type": "Keyword",
+            "value": ")"
+          },
+          {
+            "$type": "Keyword",
             "value": ":"
           },
           {
-            "$type": "Alternatives",
-            "elements": [
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$refText": "DATAINT"
+            "$type": "Assignment",
+            "feature": "typeOutputDefition",
+            "operator": "=",
+            "terminal": {
+              "$type": "Alternatives",
+              "elements": [
+                {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "TypeOutputDefinition"
+                  },
+                  "arguments": []
                 },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$refText": "DATASTRING"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$refText": "DATADATETIME"
-                },
-                "arguments": []
-              }
-            ]
+                {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "EnumReference"
+                  },
+                  "arguments": []
+                }
+              ]
+            }
           }
         ]
       },
@@ -868,6 +915,38 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
       "name": "TypeDefinition",
       "definition": {
         "$type": "Assignment",
+        "feature": "data",
+        "operator": "=",
+        "terminal": {
+          "$type": "Alternatives",
+          "elements": [
+            {
+              "$type": "Keyword",
+              "value": "int"
+            },
+            {
+              "$type": "Keyword",
+              "value": "string"
+            },
+            {
+              "$type": "Keyword",
+              "value": "DateTime"
+            }
+          ]
+        }
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "EnumReference",
+      "definition": {
+        "$type": "Assignment",
         "feature": "enum",
         "operator": "=",
         "terminal": {
@@ -875,15 +954,34 @@ const ClassLanguageGrammar = () => loadedClassLanguageGrammar !== null && loaded
           "type": {
             "$refText": "Enum"
           },
-          "terminal": {
+          "deprecatedSyntax": false
+        }
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "TypeOutputDefinition",
+      "definition": {
+        "$type": "Alternatives",
+        "elements": [
+          {
             "$type": "RuleCall",
             "rule": {
-              "$refText": "ID"
+              "$refText": "TypeDefinition"
             },
             "arguments": []
           },
-          "deprecatedSyntax": false
-        }
+          {
+            "$type": "Keyword",
+            "value": "void"
+          }
+        ]
       },
       "definesHiddenTokens": false,
       "entry": false,

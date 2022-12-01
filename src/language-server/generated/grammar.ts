@@ -785,16 +785,57 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
             "value": ":"
           },
           {
-            "$type": "Assignment",
-            "feature": "typeDefinition",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$refText": "TypeDefinition"
+            "$type": "Alternatives",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "typeDefinition",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$refText": "Element"
+                  },
+                  "deprecatedSyntax": false
+                }
               },
-              "arguments": []
-            }
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$refText": "TypeDefinition"
+                },
+                "arguments": []
+              }
+            ]
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Element",
+      "definition": {
+        "$type": "Alternatives",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Class"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$refText": "Enum"
+            },
+            "arguments": []
           }
         ]
       },
