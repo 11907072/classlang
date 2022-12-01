@@ -50,6 +50,11 @@ class ClassLanguageValidator {
                 names.push(AbstractClass.name);
             }
         });
+        object.$container.imports.forEach(function (Import) {
+            if (!(object === Import)) {
+                names.push(Import.name);
+            }
+        });
         return names;
     }
     uniqueAttribute(attribute, accept) {
