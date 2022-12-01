@@ -14,7 +14,8 @@ class ClassLanguageValidationRegistry extends langium_1.ValidationRegistry {
             Enum: [validator.uniqueContainerName],
             Class: [validator.validExtension, validator.uniqueContainerName],
             AbstractClass: [validator.uniqueContainerName],
-            Function: validator.uniqueFunction
+            Function: validator.uniqueFunction,
+            Import: validator.uniqueContainerName
         };
         this.register(checks, validator);
     }
@@ -28,7 +29,7 @@ class ClassLanguageValidator {
         var names = this.getAllOtherNames(object);
         names.forEach(function (name) {
             if (object.name == name) {
-                accept("error", "names of classes, enums and abstract classes have to be unique", { node: object, property: 'name' });
+                accept("error", "names of classes, enums and abstract classes and imported classes have to be unique", { node: object, property: 'name' });
             }
         });
     }

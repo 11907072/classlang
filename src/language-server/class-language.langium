@@ -7,7 +7,7 @@ Import:
     'import' name=ID;
 
 Class:
-    'Class' (name = ID) extension=(Extension)? implementation=(Implementation)? '{' (attributes += Attribute)* (functions += Function)* '}';
+    'Class' (name=ID) extension=(Extension)? implementation=(Implementation)? '{' (attributes+=Attribute)* (functions+=Function)* '}';
 
 Extension:
     'extends' class=[Class];
@@ -16,19 +16,19 @@ Implementation:
     'implements' abstractClass=[AbstractClass];
 
 AbstractClass:
-    'abstract' 'Class' (name = ID) '{' (functions += Function)* '}';
+    'abstract' 'Class' (name=ID) '{' (functions+=Function)* '}';
 
 Enum:
     'Enum' (name=ID) '{' (enumItems+=EnumItem)* '}';
 
 EnumItem:
-    (name = ID);
+    (name=ID);
 
 Attribute:
-    'attribute' visibility=Visibility (name = ID) ":" (typeDefinition=[Element]|TypeDefinition);
+    'attribute' visibility=Visibility (name=ID) ":" (typeDefinition=[Element]|TypeDefinition);
 
 Function:
-    'function' visibility=Visibility (name = ID) "("inputs=Inputs?")" ":" (typeOutputDefition=[Element]|TypeOutputDefinition);
+    'function' visibility=Visibility (name=ID) "("inputs=Inputs?")" ":" (typeOutputDefition=[Element]|TypeOutputDefinition);
 
 Element:
     (Class | Enum | Import);
@@ -37,7 +37,7 @@ Inputs:
     ((inputs+=Input) ("," inputs+=Input)*)?;
 
 Input:
-    (name = ID) ":" (typeDefinition=[Element]|TypeDefinition) ("[]")?;
+    (name=ID) ":" (typeDefinition=[Element]|TypeDefinition) ("[]")?;
 
 TypeDefinition:
     data=("int" | "string" | "DateTime" );

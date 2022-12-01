@@ -1,5 +1,5 @@
 import {ValidationAcceptor, ValidationChecks, ValidationRegistry } from 'langium';
-import { Attribute, ClassLanguageAstType, Enum, Class, Function, AbstractClass } from './generated/ast';
+import { Attribute, ClassLanguageAstType, Enum, Class, Function, AbstractClass, Import } from './generated/ast';
 import type { ClassLanguageServices } from './class-language-module';
 
 
@@ -15,7 +15,8 @@ export class ClassLanguageValidationRegistry extends ValidationRegistry {
             Enum: [validator.uniqueContainerName],
             Class: [validator.validExtension, validator.uniqueContainerName],
             AbstractClass: [validator.uniqueContainerName],
-            Function: validator.uniqueFunction
+            Function: validator.uniqueFunction,
+            Import: validator.uniqueContainerName
             
         };
         this.register(checks, validator);
@@ -26,17 +27,17 @@ export class ClassLanguageValidationRegistry extends ValidationRegistry {
  * Implementation of custom validations.
  */
 export class ClassLanguageValidator {
-    uniqueContainerName(object: Class | AbstractClass | Enum, accept: ValidationAcceptor){
+    uniqueContainerName(object: Class | AbstractClass | Enum | Import, accept: ValidationAcceptor){
         var names = this.getAllOtherNames(object);
         names.forEach( function(name){
             if(object.name == name){
-                accept("error","names of classes, enums and abstract classes have to be unique",{node: object, property: 'name'});
+                accept("error","names of classes, enums and abstract classes and imported classes have to be unique",{node: object, property: 'name'});
             }
         })
     }
 
 
-    getAllOtherNames(object: Class | AbstractClass | Enum): string[] {
+    getAllOtherNames(object: Class | AbstractClass | Enum | Import): string[] {
         var names: string[] = [];
         object.$container.classes.forEach( function(Class){
             if(!(object === Class)){
