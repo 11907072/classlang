@@ -38,7 +38,7 @@ export function isAbstractClass(item: unknown): item is AbstractClass {
 export interface Attribute extends AstNode {
     readonly $container: Class;
     name: string
-    typeDefinition: Reference<Element>
+    typeDefinition?: Reference<Element> | TypeDefinition
     visibility: Visibility
 }
 
@@ -101,7 +101,7 @@ export interface Function extends AstNode {
     readonly $container: AbstractClass | Class;
     inputs?: Inputs
     name: string
-    typeOutputDefition: Reference<Element>
+    typeOutputDefition?: Reference<Element> | TypeOutputDefinition
     visibility: Visibility
 }
 
@@ -136,7 +136,7 @@ export function isImport(item: unknown): item is Import {
 export interface Input extends AstNode {
     readonly $container: Inputs;
     name: string
-    typeDefinition: Reference<Element>
+    typeDefinition?: Reference<Element> | TypeDefinition
 }
 
 export const Input = 'Input';
@@ -170,6 +170,7 @@ export function isModel(item: unknown): item is Model {
 }
 
 export interface TypeDefinition extends AstNode {
+    readonly $container: Attribute | Function | Input;
     data: 'DateTime' | 'int' | 'string'
 }
 

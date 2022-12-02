@@ -25,10 +25,10 @@ EnumItem:
     (name=ID);
 
 Attribute:
-    'attribute' visibility=Visibility (name=ID) ":" (typeDefinition=[Element]|TypeDefinition);
+    'attribute' visibility=Visibility (name=ID) ":" (typeDefinition=[Element]("[]")?|typeDefinition=TypeDefinition)?;
 
 Function:
-    'function' visibility=Visibility (name=ID) "("inputs=Inputs?")" ":" (typeOutputDefition=[Element]|TypeOutputDefinition);
+    'function' visibility=Visibility (name=ID) "("inputs=Inputs?")" ":" (typeOutputDefition=[Element]("[]")?|typeOutputDefition=TypeOutputDefinition)?;
 
 Element:
     (Class | Enum | Import);
@@ -37,10 +37,10 @@ Inputs:
     ((inputs+=Input) ("," inputs+=Input)*)?;
 
 Input:
-    (name=ID) ":" (typeDefinition=[Element]|TypeDefinition) ("[]")?;
+    (name=ID) ":" (typeDefinition=[Element]("[]")?|typeDefinition=TypeDefinition)?;
 
 TypeDefinition:
-    data=("int" | "string" | "DateTime" );
+    data=("int" | "string" | "DateTime" )("[]")?;
 
 Visibility:
     visibility=('#'|'+'|'-');

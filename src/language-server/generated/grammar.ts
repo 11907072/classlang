@@ -437,25 +437,41 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
             "$type": "Alternatives",
             "elements": [
               {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Assignment",
+                    "feature": "typeDefinition",
+                    "operator": "=",
+                    "terminal": {
+                      "$type": "CrossReference",
+                      "type": {
+                        "$refText": "Element"
+                      },
+                      "deprecatedSyntax": false
+                    }
+                  },
+                  {
+                    "$type": "Keyword",
+                    "value": "[]",
+                    "cardinality": "?"
+                  }
+                ]
+              },
+              {
                 "$type": "Assignment",
                 "feature": "typeDefinition",
                 "operator": "=",
                 "terminal": {
-                  "$type": "CrossReference",
-                  "type": {
-                    "$refText": "Element"
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "TypeDefinition"
                   },
-                  "deprecatedSyntax": false
+                  "arguments": []
                 }
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$refText": "TypeDefinition"
-                },
-                "arguments": []
               }
-            ]
+            ],
+            "cardinality": "?"
           }
         ]
       },
@@ -529,25 +545,41 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
             "$type": "Alternatives",
             "elements": [
               {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Assignment",
+                    "feature": "typeOutputDefition",
+                    "operator": "=",
+                    "terminal": {
+                      "$type": "CrossReference",
+                      "type": {
+                        "$refText": "Element"
+                      },
+                      "deprecatedSyntax": false
+                    }
+                  },
+                  {
+                    "$type": "Keyword",
+                    "value": "[]",
+                    "cardinality": "?"
+                  }
+                ]
+              },
+              {
                 "$type": "Assignment",
                 "feature": "typeOutputDefition",
                 "operator": "=",
                 "terminal": {
-                  "$type": "CrossReference",
-                  "type": {
-                    "$refText": "Element"
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "TypeOutputDefinition"
                   },
-                  "deprecatedSyntax": false
+                  "arguments": []
                 }
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$refText": "TypeOutputDefinition"
-                },
-                "arguments": []
               }
-            ]
+            ],
+            "cardinality": "?"
           }
         ]
       },
@@ -670,29 +702,40 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
             "$type": "Alternatives",
             "elements": [
               {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Assignment",
+                    "feature": "typeDefinition",
+                    "operator": "=",
+                    "terminal": {
+                      "$type": "CrossReference",
+                      "type": {
+                        "$refText": "Element"
+                      },
+                      "deprecatedSyntax": false
+                    }
+                  },
+                  {
+                    "$type": "Keyword",
+                    "value": "[]",
+                    "cardinality": "?"
+                  }
+                ]
+              },
+              {
                 "$type": "Assignment",
                 "feature": "typeDefinition",
                 "operator": "=",
                 "terminal": {
-                  "$type": "CrossReference",
-                  "type": {
-                    "$refText": "Element"
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$refText": "TypeDefinition"
                   },
-                  "deprecatedSyntax": false
+                  "arguments": []
                 }
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$refText": "TypeDefinition"
-                },
-                "arguments": []
               }
-            ]
-          },
-          {
-            "$type": "Keyword",
-            "value": "[]",
+            ],
             "cardinality": "?"
           }
         ]
@@ -708,26 +751,36 @@ export const ClassLanguageGrammar = (): Grammar => loadedClassLanguageGrammar ??
       "$type": "ParserRule",
       "name": "TypeDefinition",
       "definition": {
-        "$type": "Assignment",
-        "feature": "data",
-        "operator": "=",
-        "terminal": {
-          "$type": "Alternatives",
-          "elements": [
-            {
-              "$type": "Keyword",
-              "value": "int"
-            },
-            {
-              "$type": "Keyword",
-              "value": "string"
-            },
-            {
-              "$type": "Keyword",
-              "value": "DateTime"
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "data",
+            "operator": "=",
+            "terminal": {
+              "$type": "Alternatives",
+              "elements": [
+                {
+                  "$type": "Keyword",
+                  "value": "int"
+                },
+                {
+                  "$type": "Keyword",
+                  "value": "string"
+                },
+                {
+                  "$type": "Keyword",
+                  "value": "DateTime"
+                }
+              ]
             }
-          ]
-        }
+          },
+          {
+            "$type": "Keyword",
+            "value": "[]",
+            "cardinality": "?"
+          }
+        ]
       },
       "definesHiddenTokens": false,
       "entry": false,
