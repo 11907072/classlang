@@ -110,10 +110,10 @@ export class ClassLanguageValidator {
             returnArray.push(choice);
         })
         if(Class.extension != null){
-            returnArray = returnArray.concat(this.getParentFunctions(Class.extension.class.ref!));
+            returnArray = returnArray.concat(this.getParentFunctions(Class.extension.class.ref! as Class));
         }
         if(Class.implementation != null){
-            returnArray = returnArray.concat(this.getAbstractParentFunctions(Class.implementation?.abstractClass.ref!));
+            returnArray = returnArray.concat(this.getAbstractParentFunctions(Class.implementation?.abstractClass.ref! as AbstractClass));
         }
         return returnArray;
     }

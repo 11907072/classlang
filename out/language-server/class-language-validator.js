@@ -29,7 +29,7 @@ class ClassLanguageValidator {
         var names = this.getAllOtherNames(object);
         names.forEach(function (name) {
             if (object.name == name) {
-                accept("error", "names of classes, enums and abstract classes and imported classes have to be unique", { node: object, property: 'name' });
+                accept("error", "names of all classes, enums and abstract classes and imported classes have to be unique", { node: object, property: 'name' });
             }
         });
     }
