@@ -11,9 +11,9 @@ class ClassLanguageValidationRegistry extends langium_1.ValidationRegistry {
         const validator = services.validation.ClassLanguageValidator;
         const checks = {
             Attribute: validator.uniqueAttribute,
-            Enum: [validator.uniqueContainerName],
+            Enum: validator.uniqueContainerName,
             Class: [validator.validExtension, validator.uniqueContainerName],
-            AbstractClass: [validator.uniqueContainerName],
+            AbstractClass: validator.uniqueContainerName,
             Function: validator.uniqueFunction,
             Import: validator.uniqueContainerName
         };
@@ -25,6 +25,7 @@ exports.ClassLanguageValidationRegistry = ClassLanguageValidationRegistry;
  * Implementation of custom validations.
  */
 class ClassLanguageValidator {
+    // checks names of all abstract, imported and regular classes + enums for duplicates
     uniqueContainerName(object, accept) {
         var names = this.getAllOtherNames(object);
         names.forEach(function (name) {
@@ -33,6 +34,7 @@ class ClassLanguageValidator {
             }
         });
     }
+    // returns a name-list of objects of given types
     getAllOtherNames(object) {
         var names = [];
         object.$container.classes.forEach(function (Class) {
@@ -57,6 +59,7 @@ class ClassLanguageValidator {
         });
         return names;
     }
+    // checks names of attributes for duplicates within a straight line in a hierarchy
     uniqueAttribute(attribute, accept) {
         var attributes = this.getParentAttributes(attribute.$container);
         attributes.forEach(function (choice) {
@@ -65,6 +68,7 @@ class ClassLanguageValidator {
             }
         });
     }
+    //returns a list of attributes higher up in the hierarchy than the given Class
     getParentAttributes(Class) {
         var returnArray = [];
         Class.attributes.forEach(function (attribute) {
@@ -75,6 +79,7 @@ class ClassLanguageValidator {
         }
         return returnArray;
     }
+    //checks names of functions for duplicates within a straight line in a hierarchy
     uniqueFunction(Function, accept) {
         var container;
         if (Function.$container.$type == "AbstractClass") {
@@ -91,6 +96,7 @@ class ClassLanguageValidator {
             }
         });
     }
+    //returns a list of functions higher up in the hierarchy than the given Class
     getParentFunctions(Class) {
         var _a;
         var returnArray = [];
@@ -105,6 +111,7 @@ class ClassLanguageValidator {
         }
         return returnArray;
     }
+    //returns a list of functions in an abstract Class
     getAbstractParentFunctions(AbstractClass) {
         var returnArray = [];
         AbstractClass.functions.forEach(function (choice) {
@@ -112,6 +119,7 @@ class ClassLanguageValidator {
         });
         return returnArray;
     }
+    //checks for circles in class extensions
     validExtension(Class, accept) {
         if (Class.extension != null) {
             var superClass = Class.extension.class.ref;
@@ -122,7 +130,7 @@ class ClassLanguageValidator {
                 while (superClass.extension != null) {
                     if (Class.name == superClass.name) {
                         accept("error", "class extensions must be acyclic", { node: Class, property: 'name' });
-                        break;
+                        return;
                     }
                     superClass = superClass.extension.class.ref;
                 }
